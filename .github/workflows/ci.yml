@@ -43,10 +43,10 @@ jobs:
       matrix:
         template: [node-ts, nest-api, react-vite, next-app, expo-app]
     env:
-      CI: 'true'
+      CI: "true"
       DATABASE_URL: postgresql://starter:starter_ci_password@127.0.0.1:5432/starter
-      NEXT_TELEMETRY_DISABLED: '1'
-      EXPO_NO_TELEMETRY: '1'
+      NEXT_TELEMETRY_DISABLED: "1"
+      EXPO_NO_TELEMETRY: "1"
       DESTINATION: /tmp/starter-${{ matrix.template }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -116,7 +116,7 @@ jobs:
           --health-cmd "pg_isready -U starter -d starter" --health-interval 2s --health-timeout 3s
           --health-retries 30
     env:
-      CI: 'true'
+      CI: "true"
       DATABASE_URL: postgresql://starter:starter_ci_password@127.0.0.1:5432/starter
       DESTINATION: /tmp/starter-go-api
     steps:
