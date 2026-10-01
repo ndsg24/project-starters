@@ -62,6 +62,6 @@ GitHub no permite hacer fork de una carpeta. Fork y “Use this template” copi
 - `scripts/`: generador local y pruebas de aislamiento.
 - `.github/`: CI del catálogo, Dependabot y configuración de contribuciones.
 
-CI valida copias aisladas de los cinco templates Node, el template Go y el generador en cada PR y push a `main`. Dependabot propone actualizaciones semanales. Los frontends tienen lint, tipos y build; agrega pruebas funcionales cuando implementes comportamiento. Expo valida la exportación web; APK/IPA requieren configuración y validación nativa adicional.
+CI valida copias aisladas de los cinco templates Node, el template Go y el generador en cada PR y push a `main`. Dependabot propone actualizaciones semanales. En Expo actualiza automáticamente solo dependencias de desarrollo: actualiza el SDK y sus módulos en conjunto con las herramientas oficiales (`npx expo install --fix`). Los frontends tienen lint, tipos y build; agrega pruebas funcionales cuando implementes comportamiento. Expo valida la exportación web; APK/IPA requieren configuración y validación nativa adicional.
 
 Consulta [CONTRIBUTING.md](CONTRIBUTING.md) y [SECURITY.md](SECURITY.md). Licencia MIT; los avisos de los scaffolds originales se conservan.

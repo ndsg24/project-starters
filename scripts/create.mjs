@@ -39,7 +39,11 @@ export async function create(template, destination) {
       await writeFile(path, JSON.stringify(data, null, 2) + '\n');
     }
   }
-  await cp(join(root, 'LICENSE'), join(target, 'LICENSE'));
+  try { await stat(join(target, 'LICENSE')); }
+  catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    await cp(join(root, 'LICENSE'), join(target, 'LICENSE'));
+  }
   return target;
 }
 

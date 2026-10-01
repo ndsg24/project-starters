@@ -34,6 +34,8 @@ updates:
         dependency-type: development
   - package-ecosystem: npm
     directory: /templates/expo-app
+    allow:
+      - dependency-type: development
     schedule:
       interval: weekly
     open-pull-requests-limit: 3

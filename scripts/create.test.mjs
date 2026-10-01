@@ -12,6 +12,7 @@ test('all templates are standalone, renamed, and omit generated files', async ()
    const target = join(temporary, `test-${template}`);
    await create(template, target);
    await stat(join(target, 'LICENSE'));
+   if (template === 'expo-app') assert.match(await readFile(join(target, 'LICENSE'), 'utf8'), /650 Industries/);
    if (template === 'go-api') {
     assert.match(await readFile(join(target, 'go.mod'), 'utf8'), /example.com\/test-go-api/);
     assert.match(await readFile(join(target, 'cmd/api/main.go'), 'utf8'), /example.com\/test-go-api/);
