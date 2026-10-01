@@ -1,11 +1,14 @@
 # Contribuir
 
-Cada template debe funcionar sin archivos externos a su carpeta. Conserva su lockfile, README, `.env.example` y CI independiente.
+Cada template funciona fuera del catálogo. Usa pnpm 10.13.1 y Node 24.
 
-1. Usa Node 24 o Go 1.25 según el proyecto.
-2. Ejecuta `npm ci && npm run check` dentro del template, o `make check && make build` para Go.
-3. Ejecuta `npm test` en la raíz para validar el generador.
-4. Genera una copia fuera del catálogo y verifica su instalación.
-5. Documenta cambios de versiones o pasos manuales en el README del template.
+1. Mantén convenciones comunes idénticas a `conventions/`.
+2. Ejecuta `pnpm check` en el template; backend también `pnpm test:api`.
+3. Ejecuta `pnpm test` en la raíz y verifica una copia generada.
+4. Sigue los límites hexagonales o FSD aplicados por ESLint y las pruebas.
+5. Mantén Bruno, OpenAPI, documentación y lockfiles actualizados.
+6. Usa Conventional Commits y un PR para actualizar `main`.
 
-No compartas dependencias mediante workspaces ni enlaces a la raíz. No agregues credenciales o artefactos de build. Las actualizaciones de los starters no se propagan automáticamente a proyectos ya creados.
+No agregues dependencias del catálogo a los templates. No publiques secretos.
+En Expo actualiza módulos nativos como conjunto con las herramientas oficiales.
+Las copias existentes no reciben automáticamente los cambios del catálogo.

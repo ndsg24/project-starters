@@ -1,0 +1,155 @@
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --canvas: #010203;
+  --surface: #0d0f12;
+  --text: #f8fafc;
+  --muted: #aab4c0;
+  --line: rgba(230, 196, 106, 0.18);
+  --accent: #e6c46a;
+  --focus: #f2d986;
+}
+[data-theme='light'] {
+  color-scheme: light;
+  --canvas: #f7f9fc;
+  --surface: #ffffff;
+  --text: #111a20;
+  --muted: #505a60;
+  --line: rgba(35, 48, 65, 0.2);
+  --accent: #7d560b;
+  --focus: #5f3d00;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--text);
+  font-family: 'Manrope', system-ui, sans-serif;
+  line-height: 1.6;
+}
+button,
+select {
+  font: inherit;
+}
+button,
+select {
+  min-height: 44px;
+}
+button {
+  cursor: pointer;
+}
+button:disabled,
+select:disabled {
+  opacity: 0.5;
+}
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+.shell {
+  width: min(1040px, 100%);
+  margin: auto;
+  padding: 32px clamp(20px, 5vw, 64px) 64px;
+}
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.wordmark {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.wordmark span,
+.eyebrow,
+.status {
+  color: var(--accent);
+}
+.status {
+  font-size: 12px;
+}
+.hero {
+  padding: clamp(64px, 12vw, 128px) 0 64px;
+}
+.eyebrow {
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+h1 {
+  font-size: clamp(36px, 6vw, 64px);
+  line-height: 1.1;
+  letter-spacing: -2px;
+  max-width: 760px;
+  margin: 0 0 24px;
+}
+.lead {
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 540px;
+}
+.preferences-panel {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 28px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  align-items: center;
+}
+.preferences-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.language-field {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+}
+.control {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 16px;
+  min-width: 100px;
+}
+.muted {
+  color: var(--muted);
+  margin: 0;
+}
+.architecture-note {
+  padding-top: 40px;
+}
+h2 {
+  font-size: 20px;
+  letter-spacing: -0.5px;
+  margin: 0 0 12px;
+}
+code {
+  display: block;
+  margin-top: 24px;
+  color: var(--accent);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .preferences-panel {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .hero {
+    padding-top: 72px;
+  }
+  h1 {
+    letter-spacing: -1px;
+  }
+}

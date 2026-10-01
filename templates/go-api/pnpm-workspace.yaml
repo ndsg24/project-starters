@@ -1,0 +1,8 @@
+packages:
+  - '.'
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@parcel/watcher'
+  - 'esbuild'
+  - 'sharp'
+  - 'unrs-resolver'

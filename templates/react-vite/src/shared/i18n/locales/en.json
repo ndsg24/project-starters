@@ -1,0 +1,15 @@
+{
+  "title": "Your next project starts here.",
+  "description": "An organized foundation to build, experiment and learn.",
+  "preferences": "Preferences",
+  "language": "Language",
+  "appearance": "Appearance",
+  "light": "Light",
+  "dark": "Dark",
+  "switchTheme": "Change theme",
+  "ready": "Ready to start",
+  "architecture": "Clear responsibilities, from day one.",
+  "architectureDescription": "Thin routes, independent features and a public API for each module.",
+  "persistence": "Your preferences are saved on this device.",
+  "home": "Home"
+}

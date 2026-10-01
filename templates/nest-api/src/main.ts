@@ -1,17 +1,9 @@
-import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { createApplication } from './create-application.js'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
-  app.enableShutdownHooks();
-  await app.listen(process.env.PORT ?? 3000);
+  const port = Number(process.env.PORT ?? 3000)
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Invalid PORT')
+  const app = await createApplication()
+  await app.listen(port, process.env.HOST ?? '127.0.0.1')
 }
-void bootstrap();
+void bootstrap()
