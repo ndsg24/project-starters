@@ -1,6 +1,6 @@
 import 'server-only'
-import { createHttpClient } from '../api'
+import { HttpClient } from '../api'
 
 export function createServerApi() {
-  return createHttpClient(process.env.API_URL ?? 'http://localhost:4000')
+  return new HttpClient(process.env.API_URL ?? 'http://localhost:4000')
 }

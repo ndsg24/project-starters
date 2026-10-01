@@ -1,98 +1,175 @@
 /** @jest-environment node */
-import { ApiError, createHttpClient } from '../../src/shared/api/lib/http-client'
+import { createServer, type Server } from 'node:http'
+import { type AddressInfo } from 'node:net'
+import { ApiError, HttpClient } from '../../src/shared/api/lib/http-client'
 
-const originalFetch = globalThis.fetch
-const fetchMock = jest.fn<ReturnType<typeof fetch>, Parameters<typeof fetch>>()
+let server: Server
+let baseUrl: string
+let receivedRequests = 0
 
-beforeEach(() => {
-  fetchMock.mockReset()
-  globalThis.fetch = fetchMock
+beforeAll(async () => {
+  server = createServer(async (request, response) => {
+    receivedRequests += 1
+    const url = new URL(request.url ?? '/', 'http://localhost')
+
+    response.setHeader('Content-Type', 'application/json')
+
+    if (url.pathname === '/v1/error') {
+      response.writeHead(422).end('{"code":"invalid"}')
+
+      return
+    }
+
+    if (url.pathname === '/v1/empty') {
+      response.writeHead(204).end()
+
+      return
+    }
+
+    if (url.pathname === '/v1/invalid') {
+      response.end('{')
+
+      return
+    }
+
+    if (url.pathname === '/v1/network') {
+      request.socket.destroy()
+
+      return
+    }
+
+    if (url.pathname === '/v1/slow') {
+      const timer = setTimeout(() => response.end('{}'), 200)
+
+      response.on('close', () => clearTimeout(timer))
+
+      return
+    }
+
+    const chunks: Buffer[] = []
+
+    for await (const chunk of request) {
+      chunks.push(Buffer.from(chunk))
+    }
+
+    const body = Buffer.concat(chunks).toString()
+
+    response.end(
+      JSON.stringify({
+        method: request.method,
+        path: url.pathname,
+        query: url.searchParams.get('search'),
+        requestId: request.headers['x-request-id'],
+        contentType: request.headers['content-type'],
+        body: body ? JSON.parse(body) : undefined,
+      }),
+    )
+  })
+
+  await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve))
+  baseUrl = `http://127.0.0.1:${(server.address() as AddressInfo).port}/v1`
 })
 
-afterAll(() => {
-  globalThis.fetch = originalFetch
-})
+afterAll(async () => {
+  server.closeAllConnections()
 
-it('Should send JSON to the configured API without losing headers', async () => {
-  fetchMock.mockResolvedValue(
-    new Response('{"ok":true}', { headers: { 'content-type': 'application/json' } }),
+  await new Promise<void>((resolve, reject) =>
+    server.close((error) => (error ? reject(error) : resolve())),
   )
+})
 
-  const client = createHttpClient('https://api.test/v1')
+it('Should use Axios to serialize JSON, headers and query parameters', async () => {
+  const client = new HttpClient(baseUrl)
 
   await expect(
-    client.request('resource', {
-      method: 'POST',
-      body: { value: 1 },
-      headers: { 'X-Request-ID': 'test' },
-    }),
-  ).resolves.toEqual({ ok: true })
-
-  const [url, init] = fetchMock.mock.calls[0]!
-
-  expect(url).toBe('https://api.test/v1/resource')
-  expect(new Headers(init?.headers).get('X-Request-ID')).toBe('test')
-  expect(init?.body).toBe('{"value":1}')
+    client.post(
+      'resource',
+      { value: 1 },
+      {
+        headers: { 'X-Request-ID': 'test' },
+        params: { search: 'a b' },
+      },
+    ),
+  ).resolves.toMatchObject({
+    method: 'POST',
+    path: '/v1/resource',
+    query: 'a b',
+    requestId: 'test',
+    contentType: 'application/json',
+    body: { value: 1 },
+  })
 })
 
-it('Should reject cross-origin and escaping paths before sending a request', async () => {
-  const client = createHttpClient('https://api.test/v1')
+it.each(['get', 'put', 'patch', 'delete'] as const)('Should send the %s method', async (method) => {
+  const client = new HttpClient(baseUrl)
 
-  await expect(client.request('https://other.test')).rejects.toThrow()
-  await expect(client.request('../private')).rejects.toThrow()
-  expect(fetchMock).not.toHaveBeenCalled()
+  await expect(client[method]('resource')).resolves.toMatchObject({ method: method.toUpperCase() })
 })
 
-it('Should normalize HTTP errors and tolerate an empty successful response', async () => {
-  const client = createHttpClient('https://api.test')
+it('Should reject unsafe paths and invalid configuration before sending', async () => {
+  const client = new HttpClient(baseUrl)
+  const previousCount = receivedRequests
 
-  fetchMock.mockResolvedValueOnce(
-    new Response('{"code":"invalid"}', {
-      status: 422,
-      headers: { 'content-type': 'application/json' },
-    }),
-  )
+  await expect(client.get('https://other.test')).rejects.toThrow()
+  await expect(client.get('../private')).rejects.toThrow()
+  await expect(client.get('resource', { timeoutMs: 0 })).rejects.toThrow()
+  expect(() => new HttpClient('ftp://api.test')).toThrow()
+  expect(() => new HttpClient('https://user:password@api.test')).toThrow()
+  expect(() => new HttpClient(baseUrl, -1)).toThrow()
+  expect(receivedRequests).toBe(previousCount)
+})
 
-  await expect(client.request('resource')).rejects.toMatchObject({ kind: 'http', status: 422 })
-  fetchMock.mockResolvedValueOnce(new Response(null, { status: 204 }))
-  await expect(client.request('resource')).resolves.toBeUndefined()
+it('Should normalize HTTP errors and empty responses', async () => {
+  const client = new HttpClient(baseUrl)
+
+  await expect(client.get('error')).rejects.toMatchObject({
+    kind: 'http',
+    status: 422,
+    details: { code: 'invalid' },
+  })
+
+  await expect(client.get('empty')).resolves.toBeUndefined()
 })
 
 it('Should normalize network errors and invalid JSON', async () => {
-  const client = createHttpClient('https://api.test')
+  const client = new HttpClient(baseUrl)
 
-  fetchMock.mockRejectedValueOnce(new TypeError('fetch failed'))
-  await expect(client.request('resource')).rejects.toBeInstanceOf(ApiError)
-
-  fetchMock.mockResolvedValueOnce(
-    new Response('{', { headers: { 'content-type': 'application/json' } }),
-  )
-
-  await expect(client.request('resource')).rejects.toMatchObject({ kind: 'response' })
+  await expect(client.get('network')).rejects.toBeInstanceOf(ApiError)
+  await expect(client.get('network')).rejects.toMatchObject({ kind: 'network' })
+  await expect(client.get('invalid')).rejects.toMatchObject({ kind: 'response' })
 })
 
-it('Should abort requests on timeout and distinguish user cancellation', async () => {
-  fetchMock.mockImplementation(
-    (_url, init) =>
-      new Promise((_resolve, reject) => {
-        const abort = () => reject(new Error('aborted'))
+it('Should distinguish timeouts from cancellation before and during requests', async () => {
+  const client = new HttpClient(baseUrl, 30)
 
-        if (init?.signal?.aborted) {
-          abort()
-        } else {
-          init?.signal?.addEventListener('abort', abort, { once: true })
-        }
-      }),
-  )
+  await expect(client.get('slow')).rejects.toMatchObject({ kind: 'timeout' })
+  const cancelled = new AbortController()
 
-  const client = createHttpClient('https://api.test', 10)
+  cancelled.abort()
 
-  await expect(client.request('resource')).rejects.toMatchObject({ kind: 'timeout' })
-  const controller = new AbortController()
-
-  controller.abort()
-
-  await expect(client.request('resource', { signal: controller.signal })).rejects.toMatchObject({
+  await expect(client.get('resource', { signal: cancelled.signal })).rejects.toMatchObject({
     kind: 'cancelled',
   })
+
+  const controller = new AbortController()
+  const pending = client.get('slow', { signal: controller.signal, timeoutMs: 1000 })
+
+  setTimeout(() => controller.abort(), 20)
+  await expect(pending).rejects.toMatchObject({ kind: 'cancelled' })
+})
+
+it('Should decode responses and report decoder failures as response errors', async () => {
+  const client = new HttpClient(baseUrl)
+
+  await expect(
+    client.get('resource', { decode: (value) => (value as { method: string }).method }),
+  ).resolves.toBe('GET')
+
+  await expect(
+    client.get('resource', {
+      decode: () => {
+        throw new Error('Invalid payload')
+      },
+    }),
+  ).rejects.toMatchObject({ kind: 'response' })
 })
