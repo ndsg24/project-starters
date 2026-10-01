@@ -10,6 +10,7 @@ Requiere Node 24 y pnpm 10.13.1.
 nvm use
 corepack enable
 pnpm install --frozen-lockfile
+pnpm setup
 git init -b main
 pnpm prepare
 pnpm dev
@@ -93,7 +94,7 @@ pnpm build
 pnpm test:api
 ```
 
-Importa `bruno/` en Bruno Desktop. Su entorno `local` usa `127.0.0.1:3000`; para otro puerto usa
+Importa `bruno/` en Bruno Desktop. Su entorno `local` usa `127.0.0.1:4000`; para otro puerto usa
 `pnpm bruno --env-var baseUrl=http://127.0.0.1:8080`. Swagger/OpenAPI permanecen en infraestructura.
 Actualiza DTO/schema y Bruno cuando cambie una ruta. El UI de Go usa el CDN de Scalar;
 `/openapi.json` sigue siendo local. No publiques documentación interna en producción sin decidir su
@@ -105,3 +106,22 @@ formatean ni analizan Go). El generador actualiza el módulo en todos los archiv
 reemplaza `example.com/go-api` por tu módulo en `go.mod` y en los imports.
 
 Licencia MIT. Conserva los avisos de copyright originales.
+
+## Entorno y Docker Compose
+
+`pnpm setup` crea `.env` sin sobrescribirlo. Ejecuta `pnpm docker:up` para construir los
+contenedores y esperar sus healthchecks; `pnpm docker:logs` muestra logs y `pnpm docker:down` los
+detiene. Requiere Docker con Compose v2. No se crean modelos, CRUDs ni datos de ejemplo.
+
+Setup inicia PostgreSQL y verifica una conexión real. `pnpm dev` ejecuta la API en el host;
+`pnpm docker:up` activa el perfil `app` con PostgreSQL + API. El puerto por defecto es 4000. La BD
+usa un volumen persistente y su puerto se publica solo en 127.0.0.1. El password local se genera
+durante setup. Cambia `POSTGRES_PORT` y `DATABASE_URL` si 5432 está ocupado. No se modifica una base
+remota durante setup.
+
+`pnpm db:check` y `pnpm test:integration` verifican la conexión. Los pools se cierran al apagar la
+API. `CORS_ORIGINS` acepta únicamente orígenes HTTP explícitos.
+
+La conexión pgx está en `internal/platform/database`. Usa `pnpm db:create nombre` para crear
+archivos SQL vacíos, `pnpm db:migrate` para aplicar migraciones y `pnpm db:rollback` para revertir
+la última. `migrations/` comienza vacía.

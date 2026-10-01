@@ -26,14 +26,27 @@ jobs:
   node:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:17-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+        env:
+          POSTGRES_USER: starter
+          POSTGRES_PASSWORD: starter_ci_password
+          POSTGRES_DB: starter
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U starter -d starter" --health-interval 2s --health-timeout 3s
+          --health-retries 30
     strategy:
       fail-fast: false
       matrix:
         template: [node-ts, nest-api, react-vite, next-app, expo-app]
     env:
-      CI: "true"
-      NEXT_TELEMETRY_DISABLED: "1"
-      EXPO_NO_TELEMETRY: "1"
+      CI: 'true'
+      DATABASE_URL: postgresql://starter:starter_ci_password@127.0.0.1:5432/starter
+      NEXT_TELEMETRY_DISABLED: '1'
+      EXPO_NO_TELEMETRY: '1'
       DESTINATION: /tmp/starter-${{ matrix.template }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -48,7 +61,14 @@ jobs:
           TEMPLATE: ${{ matrix.template }}
         run: node scripts/create.mjs "$TEMPLATE" "$DESTINATION"
       - run: pnpm --dir "$DESTINATION" install --frozen-lockfile
+      - name: Validate Compose configuration
+        run: |
+          pnpm --dir "$DESTINATION" setup --env-only
+          cd "$DESTINATION"
+          docker compose config --quiet
       - run: pnpm --dir "$DESTINATION" check
+      - if: matrix.template == 'node-ts' || matrix.template == 'nest-api'
+        run: pnpm --dir "$DESTINATION" test:integration
       - if: matrix.template == 'node-ts' || matrix.template == 'nest-api'
         run: pnpm --dir "$DESTINATION" test:api
       - if: matrix.template == 'expo-app'
@@ -58,19 +78,46 @@ jobs:
         run: |
           pnpm --dir "$DESTINATION" lint
           pnpm --dir "$DESTINATION" format:check
-      - if: matrix.template == 'react-vite' || matrix.template == 'next-app' || matrix.template == 'expo-app'
+      - if:
+          matrix.template == 'react-vite' || matrix.template == 'next-app' || matrix.template ==
+          'expo-app'
         run: pnpm install --frozen-lockfile
       - name: Browser preferences and responsive smoke
-        if: matrix.template == 'react-vite' || matrix.template == 'next-app' || matrix.template == 'expo-app'
+        if:
+          matrix.template == 'react-vite' || matrix.template == 'next-app' || matrix.template ==
+          'expo-app'
         env:
           TEMPLATE: ${{ matrix.template }}
-        run: PROJECT_DIRECTORY="$DESTINATION" BROWSER_EXECUTABLE="$(command -v google-chrome)" node scripts/browser-smoke.mjs "$TEMPLATE"
+        run:
+          PROJECT_DIRECTORY="$DESTINATION" BROWSER_EXECUTABLE="$(command -v google-chrome)" node
+          scripts/browser-smoke.mjs "$TEMPLATE"
+      - name: Build and verify Docker Compose startup
+        id: compose
+        run: POSTGRES_PORT=5433 pnpm --dir "$DESTINATION" docker:up
+      - name: Stop verification containers
+        if: always() && steps.compose.outcome != 'skipped'
+        run: |
+          cd "$DESTINATION"
+          POSTGRES_PORT=5433 docker compose --profile app down --volumes
       - run: pnpm --dir "$DESTINATION" audit --audit-level=high
   go:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+        env:
+          POSTGRES_USER: starter
+          POSTGRES_PASSWORD: starter_ci_password
+          POSTGRES_DB: starter
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U starter -d starter" --health-interval 2s --health-timeout 3s
+          --health-retries 30
     env:
-      CI: "true"
+      CI: 'true'
+      DATABASE_URL: postgresql://starter:starter_ci_password@127.0.0.1:5432/starter
       DESTINATION: /tmp/starter-go-api
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -86,6 +133,20 @@ jobs:
           cache-dependency-path: templates/go-api/go.sum
       - run: node scripts/create.mjs go-api "$DESTINATION"
       - run: pnpm --dir "$DESTINATION" install --frozen-lockfile
+      - name: Validate Compose configuration
+        run: |
+          pnpm --dir "$DESTINATION" setup --env-only
+          cd "$DESTINATION"
+          docker compose config --quiet
       - run: pnpm --dir "$DESTINATION" check
+      - run: pnpm --dir "$DESTINATION" test:integration
       - run: pnpm --dir "$DESTINATION" test:api
+      - name: Build and verify Docker Compose startup
+        id: compose
+        run: POSTGRES_PORT=5433 pnpm --dir "$DESTINATION" docker:up
+      - name: Stop verification containers
+        if: always() && steps.compose.outcome != 'skipped'
+        run: |
+          cd "$DESTINATION"
+          POSTGRES_PORT=5433 docker compose --profile app down --volumes
       - run: pnpm --dir "$DESTINATION" audit --audit-level=high

@@ -13,6 +13,7 @@ const ignored = new Set([
   '.next',
   '.expo',
   'dist',
+  'generated',
   'dist-native',
   'artifacts',
   'build',

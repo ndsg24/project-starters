@@ -3,6 +3,7 @@ import { Platform } from 'react-native'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useFonts, Manrope_400Regular, Manrope_600SemiBold } from '@expo-google-fonts/manrope'
+import { QueryProvider } from '@/shared/query'
 import { PreferencesProvider, nativePreferencesStore, usePreferences } from '@/shared/preferences'
 import { themes } from '@/shared/theme'
 
@@ -34,8 +35,10 @@ export default function RootLayout() {
   }
 
   return (
-    <PreferencesProvider store={nativePreferencesStore}>
-      <Navigation />
-    </PreferencesProvider>
+    <QueryProvider>
+      <PreferencesProvider store={nativePreferencesStore}>
+        <Navigation />
+      </PreferencesProvider>
+    </QueryProvider>
   )
 }

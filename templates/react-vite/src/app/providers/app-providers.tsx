@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import type { ReactNode } from 'react'
+import { QueryProvider } from '@/shared/query'
 import { PreferencesProvider, browserPreferencesStore, usePreferences } from '@/shared/preferences'
 
 function DocumentPreferences() {
@@ -21,9 +22,11 @@ function DocumentPreferences() {
 
 export function AppProviders({ children }: { children: ReactNode }) {
   return (
-    <PreferencesProvider store={browserPreferencesStore}>
-      <DocumentPreferences />
-      {children}
-    </PreferencesProvider>
+    <QueryProvider>
+      <PreferencesProvider store={browserPreferencesStore}>
+        <DocumentPreferences />
+        {children}
+      </PreferencesProvider>
+    </QueryProvider>
   )
 }

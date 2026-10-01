@@ -11,3 +11,5 @@ pnpm-lock.yaml
 go.sum
 next-env.d.ts
 expo-env.d.ts
+generated/
+*.prisma

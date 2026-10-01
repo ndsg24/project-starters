@@ -16,14 +16,19 @@
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build"
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build",
+    "setup": "node tooling/setup.mjs",
+    "docker:up": "docker compose up --build -d --wait",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
   },
   "dependencies": {
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "i18next": "^25.0.0",
     "react-i18next": "^15.0.0",
-    "@fontsource/manrope": "5.2.6"
+    "@fontsource/manrope": "5.2.6",
+    "@tanstack/react-query": "5.104.0"
   },
   "devDependencies": {
     "@types/node": "24.0.14",

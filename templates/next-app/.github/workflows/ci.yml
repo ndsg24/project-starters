@@ -26,5 +26,13 @@ jobs:
           node-version-file: .nvmrc
       - run: npm install --global pnpm@10.13.1
       - run: pnpm install --frozen-lockfile
+      - run: pnpm setup --env-only
+      - run: docker compose config --quiet
       - run: pnpm check
+      - name: Build and verify Docker Compose startup
+        id: compose
+        run: POSTGRES_PORT=5433 pnpm docker:up
+      - name: Stop verification containers
+        if: always() && steps.compose.outcome != 'skipped'
+        run: POSTGRES_PORT=5433 docker compose --profile app down --volumes
       - run: pnpm audit --audit-level=high

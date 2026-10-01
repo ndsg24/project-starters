@@ -42,6 +42,7 @@ test('all templates are standalone, renamed, and omit generated files', async ()
         '.expo',
         'bin',
         'dist',
+        'src/generated',
         'dist-native',
         'artifacts',
         '.husky/_',

@@ -1,12 +1,10 @@
+import { connectDatabase } from './platform/database/index.js'
+import { readConfig } from './platform/config/environment.js'
 import { createServer } from './server.js'
 
-const port = Number(process.env.PORT ?? 3000)
-
-if (!Number.isInteger(port) || port < 1 || port > 65535) {
-  throw new Error('Invalid PORT')
-}
-
-const server = await createServer()
+const { port, host, databaseUrl, corsOrigins } = readConfig()
+const database = await connectDatabase(databaseUrl)
+const server = await createServer({ database, corsOrigins })
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.once(signal, () => {
@@ -16,4 +14,10 @@ for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   })
 }
 
-await server.listen({ port, host: process.env.HOST ?? '127.0.0.1' })
+try {
+  await server.listen({ port, host })
+} catch (error) {
+  await server.close()
+
+  throw error
+}

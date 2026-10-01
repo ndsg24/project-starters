@@ -14,3 +14,5 @@ web-build/
 
 .husky/_/
 dist-native/
+
+src/generated/
