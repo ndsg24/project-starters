@@ -1,7 +1,6 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-
 import { languages, usePreferences } from '@/shared/preferences'
 
 const labels = { es: 'Español', en: 'English', pt: 'Português' }

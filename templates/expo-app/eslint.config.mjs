@@ -5,7 +5,6 @@ import importPlugin from 'eslint-plugin-import'
 import reactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
-
 import architecture from './tooling/eslint-boundaries.mjs'
 
 export default tseslint.config(
@@ -54,7 +53,7 @@ export default tseslint.config(
         'error',
         {
           groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'type'],
-          'newlines-between': 'always',
+          'newlines-between': 'never',
         },
       ],
       '@stylistic/lines-between-class-members': ['error', 'always'],

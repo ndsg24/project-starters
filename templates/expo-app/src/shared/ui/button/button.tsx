@@ -1,8 +1,6 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
-
 import { usePreferences } from '../../preferences'
 import { themes, spacing, sizes } from '../../theme'
-
 import type { ButtonProps } from './button.types'
 
 export function Button({ label, accessibilityLabel, disabled, selected, onPress }: ButtonProps) {

@@ -1,5 +1,4 @@
 import { createContext, useContext } from 'react'
-
 import type { Language, Preferences, ThemeName } from '../domain/preferences'
 
 export interface PreferencesContextValue {

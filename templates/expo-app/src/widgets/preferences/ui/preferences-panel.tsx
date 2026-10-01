@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-
 import { ThemeToggle } from '@/features/appearance'
 import { LanguageSelect } from '@/features/language'
 import { usePreferences } from '@/shared/preferences'

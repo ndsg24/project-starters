@@ -5,7 +5,6 @@ import { mkdir, readFile } from 'node:fs/promises'
 import { resolve, extname, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { setTimeout as delay } from 'node:timers/promises'
-
 import puppeteer from 'puppeteer-core'
 
 const template = process.argv[2]

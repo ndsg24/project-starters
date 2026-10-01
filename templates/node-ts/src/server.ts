@@ -1,7 +1,6 @@
 import Fastify from 'fastify'
 import swagger from '@fastify/swagger'
 import swaggerUi from '@fastify/swagger-ui'
-
 import { registerHealth } from './health/index.js'
 
 export async function createServer() {

@@ -1,5 +1,4 @@
 import { presentHealth } from '../../mappers/health.presenter.js'
-
 import type { FastifyInstance } from 'fastify'
 import type { GetHealthHandler } from '../../../application/queries/get-health/get-health.handler.js'
 

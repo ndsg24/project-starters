@@ -3,14 +3,13 @@ package main
 import (
 	"context"
 	"errors"
+	"example.com/go-api/internal/server"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-
-	"example.com/go-api/internal/server"
 )
 
 func main() {

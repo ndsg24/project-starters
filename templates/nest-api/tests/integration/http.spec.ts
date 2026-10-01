@@ -1,5 +1,4 @@
 import request from 'supertest'
-
 import { createApplication } from '../../src/create-application'
 
 describe('HTTP contracts', () => {
