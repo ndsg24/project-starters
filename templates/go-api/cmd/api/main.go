@@ -3,8 +3,11 @@ package main
 import (
 	"context"
 	"errors"
+	"example.com/go-api/internal/platform/config"
+	"example.com/go-api/internal/platform/database"
 	"example.com/go-api/internal/server"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,13 +16,23 @@ import (
 )
 
 func main() {
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		port = "8080"
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatal(err)
 	}
-
-	server := &http.Server{Addr: ":" + port, Handler: server.NewHandler(), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second, IdleTimeout: 60 * time.Second}
+	pool, err := database.Connect(context.Background(), cfg.DatabaseURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer pool.Close()
+	server := &http.Server{
+		Addr:              net.JoinHostPort(cfg.Host, cfg.Port),
+		Handler:           server.NewHandler(cfg.CORSOrigins),
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 	go func() {

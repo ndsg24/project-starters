@@ -13,8 +13,21 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+        env:
+          POSTGRES_USER: starter
+          POSTGRES_PASSWORD: starter_ci_password
+          POSTGRES_DB: starter
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U starter -d starter" --health-interval 2s --health-timeout 3s
+          --health-retries 30
     env:
       CI: 'true'
+      DATABASE_URL: postgresql://starter:starter_ci_password@127.0.0.1:5432/starter
       NEXT_TELEMETRY_DISABLED: '1'
       EXPO_NO_TELEMETRY: '1'
     steps:
@@ -30,6 +43,15 @@ jobs:
           go-version-file: go.mod
           cache-dependency-path: go.sum
       - run: pnpm install --frozen-lockfile
+      - run: pnpm run setup --env-only
+      - run: docker compose config --quiet
       - run: pnpm check
+      - run: pnpm test:integration
       - run: pnpm test:api
+      - name: Build and verify Docker Compose startup
+        id: compose
+        run: POSTGRES_PORT=5433 pnpm docker:up
+      - name: Stop verification containers
+        if: always() && steps.compose.outcome != 'skipped'
+        run: POSTGRES_PORT=5433 docker compose --profile app down --volumes
       - run: pnpm audit --audit-level=high

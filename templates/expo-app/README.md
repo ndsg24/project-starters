@@ -10,6 +10,7 @@ Requiere Node 24 y pnpm 10.13.1.
 nvm use
 corepack enable
 pnpm install --frozen-lockfile
+pnpm run setup
 git init -b main
 pnpm prepare
 pnpm dev
@@ -81,3 +82,19 @@ firma. Instala módulos nativos con `pnpm exec expo install <paquete>`. AsyncSto
 preferencias.
 
 Licencia MIT. Conserva los avisos de copyright originales.
+
+## Entorno y Docker Compose
+
+`pnpm run setup` crea `.env` sin sobrescribirlo. Ejecuta `pnpm docker:up` para construir los
+contenedores y esperar sus healthchecks; `pnpm docker:logs` muestra logs y `pnpm docker:down` los
+detiene. Requiere Docker con Compose v2. No se crean modelos, CRUDs ni datos de ejemplo.
+
+Compose ejecuta desarrollo web con el código montado. El cliente HTTP está en `shared/api` y admite
+timeout, cancelación, cabeceras, body JSON y un decoder opcional para validar respuestas. `ApiError`
+normaliza fallos HTTP/red/timeout. TanStack Query ya está montado en los providers, con caché y
+reintentos limitados para consultas; las mutaciones no se reintentan automáticamente.
+
+Configura `EXPO_PUBLIC_API_URL` en `.env` (por defecto `http://localhost:4000`). Compose cubre web.
+Para nativo ejecuta `pnpm dev` en el host. Android Emulator usa 10.0.2.2 para llegar al host;
+dispositivos físicos necesitan la IP LAN del equipo y `HOST=0.0.0.0` en la API. AppState y NetInfo
+gestionan foco/conectividad. Las variables EXPO_PUBLIC son públicas; no contienen credenciales.

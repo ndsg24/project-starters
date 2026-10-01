@@ -37,10 +37,11 @@ pnpm run create go-api ../mi-api-go
 cd ../mi-api-go
 git init -b main
 pnpm install --frozen-lockfile
+pnpm run setup
 pnpm dev
 ```
 
-Abre [http://127.0.0.1:3000/docs](http://127.0.0.1:3000/docs). La API también expone `/health` y
+Abre [http://127.0.0.1:4000/docs](http://127.0.0.1:4000/docs). La API también expone `/health` y
 `/openapi.json`. En otra terminal, dentro del proyecto, ejecuta `pnpm bruno` para probar la API.
 
 ### Node + Fastify
@@ -50,10 +51,11 @@ pnpm run create node-ts ../mi-api-node
 cd ../mi-api-node
 git init -b main
 pnpm install --frozen-lockfile
+pnpm run setup
 pnpm dev
 ```
 
-Abre [http://127.0.0.1:3000/docs](http://127.0.0.1:3000/docs). La API también expone `/health` y
+Abre [http://127.0.0.1:4000/docs](http://127.0.0.1:4000/docs). La API también expone `/health` y
 `/openapi.json`. En otra terminal, dentro del proyecto, ejecuta `pnpm bruno` para probar la API.
 
 ### NestJS API
@@ -63,10 +65,11 @@ pnpm run create nest-api ../mi-api-nest
 cd ../mi-api-nest
 git init -b main
 pnpm install --frozen-lockfile
+pnpm run setup
 pnpm dev
 ```
 
-Abre [http://127.0.0.1:3000/docs](http://127.0.0.1:3000/docs). La API también expone `/health` y
+Abre [http://127.0.0.1:4000/docs](http://127.0.0.1:4000/docs). La API también expone `/health` y
 `/openapi.json`. En otra terminal, dentro del proyecto, ejecuta `pnpm bruno` para probar la API.
 
 ### React + Vite
@@ -76,6 +79,7 @@ pnpm run create react-vite ../mi-web-react
 cd ../mi-web-react
 git init -b main
 pnpm install --frozen-lockfile
+pnpm run setup
 pnpm dev
 ```
 
@@ -89,6 +93,7 @@ pnpm run create next-app ../mi-web-next
 cd ../mi-web-next
 git init -b main
 pnpm install --frozen-lockfile
+pnpm run setup
 pnpm dev
 ```
 
@@ -102,6 +107,7 @@ pnpm run create expo-app ../mi-app-expo
 cd ../mi-app-expo
 git init -b main
 pnpm install --frozen-lockfile
+pnpm run setup
 pnpm dev
 ```
 
@@ -117,16 +123,16 @@ rechaza destinos existentes.
 ### Descargar solamente un template, sin clonar el catálogo
 
 Ejecuta **solo la fila del proyecto que quieras crear**, desde la carpeta donde quieras guardarlo.
-Estos comandos descargan la versión publicada `v2.0.3` sin historial Git.
+Estos comandos descargan la versión publicada `v2.1.0` sin historial Git.
 
 | Proyecto            | Comando                                                                                |
 | ------------------- | -------------------------------------------------------------------------------------- |
-| Go API              | `npx giget@latest gh:ndsg24/project-starters/templates/go-api#v2.0.3 mi-api-go`        |
-| Node + Fastify      | `npx giget@latest gh:ndsg24/project-starters/templates/node-ts#v2.0.3 mi-api-node`     |
-| NestJS API          | `npx giget@latest gh:ndsg24/project-starters/templates/nest-api#v2.0.3 mi-api-nest`    |
-| React + Vite        | `npx giget@latest gh:ndsg24/project-starters/templates/react-vite#v2.0.3 mi-web-react` |
-| Next.js             | `npx giget@latest gh:ndsg24/project-starters/templates/next-app#v2.0.3 mi-web-next`    |
-| Expo / React Native | `npx giget@latest gh:ndsg24/project-starters/templates/expo-app#v2.0.3 mi-app-expo`    |
+| Go API              | `npx giget@latest gh:ndsg24/project-starters/templates/go-api#v2.1.0 mi-api-go`        |
+| Node + Fastify      | `npx giget@latest gh:ndsg24/project-starters/templates/node-ts#v2.1.0 mi-api-node`     |
+| NestJS API          | `npx giget@latest gh:ndsg24/project-starters/templates/nest-api#v2.1.0 mi-api-nest`    |
+| React + Vite        | `npx giget@latest gh:ndsg24/project-starters/templates/react-vite#v2.1.0 mi-web-react` |
+| Next.js             | `npx giget@latest gh:ndsg24/project-starters/templates/next-app#v2.1.0 mi-web-next`    |
+| Expo / React Native | `npx giget@latest gh:ndsg24/project-starters/templates/expo-app#v2.1.0 mi-app-expo`    |
 
 Después de la descarga, sustituye `mi-proyecto` por la carpeta que elegiste:
 
@@ -134,6 +140,7 @@ Después de la descarga, sustituye `mi-proyecto` por la carpeta que elegiste:
 cd mi-proyecto
 git init -b main
 pnpm install --frozen-lockfile
+pnpm run setup
 pnpm dev
 ```
 
@@ -200,6 +207,68 @@ pnpm build:native
 Fork y “Use this template” copian el catálogo completo. Las actualizaciones no se propagan a
 proyectos ya creados. Las versiones `v1.x` eran los scaffolds originales; `v2.0.0` incorpora
 arquitectura, API tooling y preferencias.
+
+## Infraestructura lista para desarrollar
+
+Después de instalar, `pnpm run setup` crea `.env` si no existe. En las APIs levanta PostgreSQL con
+Docker Compose y verifica la conexión; en los frontends prepara las variables de la API. Requiere
+Docker Desktop/Engine con Compose v2 para usar contenedores. Las APIs usan el puerto 4000; sus
+frontends usan 5173, 3000 y 8081.
+
+| Templates          | Configuración                                                                                                                        |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Node y Nest        | Prisma 7, PostgreSQL, cliente generado automáticamente, pool, cierre de conexiones y comandos de migración. Schema sin modelos.      |
+| Go                 | pgx, PostgreSQL, pool y golang-migrate. Carpeta de migraciones vacía.                                                                |
+| React, Next y Expo | Cliente HTTP en `shared/api`, timeout, cancelación, errores normalizados y TanStack Query integrado en providers.                    |
+| Next               | Cliente de navegador por `NEXT_PUBLIC_API_URL`; cliente de servidor en `shared/server-api` por `API_URL`, aislado con `server-only`. |
+| Expo               | Foco y conectividad nativa conectados a TanStack Query.                                                                              |
+
+No se agregan CRUDs, modelos, seeds ni consultas de negocio. Las conexiones se verifican con
+`SELECT 1`. Define tus modelos/contratos cuando empieces tu feature.
+
+### Docker Compose
+
+Cada template incluye `Dockerfile`, `.dockerignore` y `compose.yaml`:
+
+```bash
+pnpm docker:up
+pnpm docker:logs
+pnpm docker:down
+```
+
+En las APIs, `pnpm run setup` inicia solo PostgreSQL. `pnpm docker:up` activa el perfil `app` para
+iniciar PostgreSQL y la API compilada, esperando sus healthchecks. Los volúmenes conservan la BD
+después de `docker:down`. Para ejecutar la API en el host usa `pnpm dev` con PostgreSQL activo.
+
+En los frontends, Compose ejecuta el servidor de desarrollo web con el código montado y dependencias
+en un volumen. Expo en Docker cubre web; para dispositivos o simuladores usa `pnpm dev` en el host.
+En Next, el cliente de servidor del contenedor apunta a `host.docker.internal:4000`, configurable en
+`compose.yaml`.
+
+Las tres APIs usan el mismo puerto y PostgreSQL local por defecto: inicia una combinación a la vez.
+Para instancias simultáneas cambia `API_PORT`, `POSTGRES_PORT`, `DATABASE_URL` y el puerto de
+desarrollo en `.env`; el mapeo `API_PORT` afecta al contenedor, mientras `PORT` afecta al servidor
+en el host. Cada carpeta tiene su propio proyecto Compose y volumen, sin `container_name`
+compartido.
+
+### Base de datos
+
+```bash
+pnpm db:up
+pnpm db:check
+pnpm db:down
+```
+
+Node/Nest incluyen `db:generate`, `db:format`, `db:validate`, `db:migrate`, `db:deploy` y
+`db:studio`. Después de definir modelos, crea tu primera migración con
+`pnpm db:migrate -- --name nombre`. Go incluye `pnpm db:create nombre_migracion`, `pnpm db:migrate`
+y `pnpm db:rollback`; los nuevos archivos SQL se crean vacíos. No se aplican cambios de schema
+automáticamente al iniciar la API.
+
+Para Expo en un emulador Android usa `http://10.0.2.2:4000`; en dispositivo físico usa la IP LAN del
+equipo y configura `HOST=0.0.0.0` en la API. Las variables `VITE_*`, `NEXT_PUBLIC_*` y
+`EXPO_PUBLIC_*` son públicas: no pongas secretos en ellas. En Next, `API_URL` se usa únicamente
+desde el cliente de servidor.
 
 ## Convenciones idénticas
 

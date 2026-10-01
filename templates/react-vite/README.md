@@ -10,6 +10,7 @@ Requiere Node 24 y pnpm 10.13.1.
 nvm use
 corepack enable
 pnpm install --frozen-lockfile
+pnpm run setup
 git init -b main
 pnpm prepare
 pnpm dev
@@ -76,3 +77,16 @@ Los tokens de tema están centralizados en `shared/theme`. Las traducciones visi
 `useTranslation`; no agregues texto fijo de producto.
 
 Licencia MIT. Conserva los avisos de copyright originales.
+
+## Entorno y Docker Compose
+
+`pnpm run setup` crea `.env` sin sobrescribirlo. Ejecuta `pnpm docker:up` para construir los
+contenedores y esperar sus healthchecks; `pnpm docker:logs` muestra logs y `pnpm docker:down` los
+detiene. Requiere Docker con Compose v2. No se crean modelos, CRUDs ni datos de ejemplo.
+
+Compose ejecuta desarrollo web con el código montado. El cliente HTTP está en `shared/api` y admite
+timeout, cancelación, cabeceras, body JSON y un decoder opcional para validar respuestas. `ApiError`
+normaliza fallos HTTP/red/timeout. TanStack Query ya está montado en los providers, con caché y
+reintentos limitados para consultas; las mutaciones no se reintentan automáticamente.
+
+Configura `VITE_API_URL` en `.env` (por defecto `http://localhost:4000`).

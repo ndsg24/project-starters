@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { readConfig } from './platform/config/environment.js'
 import { AppModule } from './app.module.js'
 
 export async function createApplication() {
@@ -10,6 +11,7 @@ export async function createApplication() {
     new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }),
   )
 
+  app.enableCors({ origin: readConfig().corsOrigins })
   app.enableShutdownHooks()
 
   const document = SwaggerModule.createDocument(

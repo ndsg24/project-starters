@@ -8,9 +8,9 @@
   },
   "scripts": {
     "dev": "tsx watch src/main.ts",
-    "build": "tsc",
+    "build": "pnpm db:generate && tsc",
     "start": "node dist/main.js",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "pnpm db:generate && tsc --noEmit",
     "prepare": "node tooling/prepare.mjs",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
@@ -21,7 +21,22 @@
     "test:coverage": "jest --coverage",
     "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build",
     "bruno": "cd bruno && node ../node_modules/@usebruno/cli/bin/bru.js run --env local",
-    "test:api": "node tooling/api-smoke.mjs"
+    "test:api": "node tooling/api-smoke.mjs",
+    "setup": "node tooling/setup.mjs",
+    "db:generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:migrate": "prisma migrate dev && prisma generate",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down",
+    "db:check": "node --import tsx tooling/database-check.mjs",
+    "test:integration": "pnpm db:check",
+    "postinstall": "prisma generate",
+    "docker:up": "docker compose --profile app up --build -d --wait",
+    "docker:down": "docker compose --profile app down",
+    "docker:logs": "docker compose --profile app logs -f",
+    "db:format": "prisma format"
   },
   "devDependencies": {
     "@types/node": "24.0.14",
@@ -43,7 +58,9 @@
     "@types/jest": "29.5.14",
     "ts-jest": "29.2.6",
     "@usebruno/cli": "4.2.0",
-    "@stylistic/eslint-plugin": "5.10.0"
+    "@stylistic/eslint-plugin": "5.10.0",
+    "prisma": "7.10.0",
+    "@types/pg": "8.23.1"
   },
   "packageManager": "pnpm@10.13.1",
   "license": "MIT",
@@ -59,14 +76,21 @@
   "dependencies": {
     "fastify": "^5.0.0",
     "@fastify/swagger": "^9.0.0",
-    "@fastify/swagger-ui": "6.1.1"
+    "@fastify/swagger-ui": "6.1.1",
+    "@prisma/client": "7.10.0",
+    "@prisma/adapter-pg": "7.10.0",
+    "dotenv": "18.0.5",
+    "pg": "8.23.1",
+    "@fastify/cors": "11.3.0"
   },
   "pnpm": {
     "overrides": {
       "axios": "1.20.0",
       "@faker-js/faker": "10.6.0",
       "js-yaml@4": "4.3.2",
-      "form-data@4": "4.0.6"
+      "form-data@4": "4.0.6",
+      "deepmerge-ts": "8.0.2",
+      "mysql2": "3.24.5"
     }
   }
 }

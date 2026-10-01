@@ -15,3 +15,5 @@ web-build/
 .husky/_/
 dist-native/
 artifacts/
+
+generated/

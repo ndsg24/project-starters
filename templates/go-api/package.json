@@ -42,7 +42,18 @@
     "dev": "go run ./cmd/api",
     "start": "./bin/api",
     "build": "go build -o bin/api ./cmd/api",
-    "typecheck": "go vet ./..."
+    "typecheck": "go vet ./...",
+    "setup": "node tooling/setup.mjs",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down",
+    "db:check": "go run ./cmd/database-check",
+    "db:migrate": "node tooling/migrations.mjs up",
+    "db:rollback": "node tooling/migrations.mjs down",
+    "db:create": "node tooling/migrations.mjs create",
+    "test:integration": "pnpm db:check",
+    "docker:up": "docker compose --profile app up --build -d --wait",
+    "docker:down": "docker compose --profile app down",
+    "docker:logs": "docker compose --profile app logs -f"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
