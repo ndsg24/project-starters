@@ -26,8 +26,25 @@ lint-staged y Husky. Los checks nativos de Go se agregan a sus scripts sin cambi
 - pre-commit: `pnpm lint-staged` (ESLint + Prettier).
 - commit-msg: `pnpm commitlint --edit "$1"` (Conventional Commits).
 - pre-push: `pnpm test && pnpm typecheck`.
-- `pnpm check`: lint, formato, tipos, pruebas y build.
-- `pnpm format`: aplica formato. Go usa además `gofmt -w cmd internal`.
+- `pnpm lint`: revisa ESLint y falla ante errores o warnings.
+- `pnpm lint:fix`: aplica las correcciones automáticas disponibles de ESLint.
+- `pnpm format:check`: comprueba Prettier sin modificar archivos.
+- `pnpm format`: aplica Prettier a los archivos compatibles.
+- `pnpm typecheck`: comprueba tipos (Go: `go vet`).
+- `pnpm check`: lint, formato, tipos, pruebas y build; también se ejecuta en CI.
+
+```bash
+pnpm lint
+pnpm lint:fix
+pnpm format
+pnpm lint
+pnpm format:check
+```
+
+`pnpm lint` también verifica el formato Go. ESLint/Prettier no analizan ni formatean Go; para
+corregir sus archivos ejecuta `gofmt -w cmd internal` y vuelve a correr `pnpm lint`.
+
+Las correcciones automáticas pueden dejar errores que debas resolver manualmente.
 
 Configura nombre/correo Git y usa commits como `feat(health): add readiness`. La CI propia se activa
 en `main` y PRs. El proyecto no depende de archivos de la raíz del catálogo. Al crear por giget
