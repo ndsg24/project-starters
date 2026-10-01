@@ -1,7 +1,6 @@
 import { Controller, Get, Inject } from '@nestjs/common'
 import { QueryBus } from '@nestjs/cqrs'
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
-
 import { GetHealthQuery } from '../../../application/queries/get-health/get-health.query.js'
 import { presentHealth } from '../../mappers/health.presenter.js'
 import { GetHealthResponseDto } from './dtos/responses/get-health-response.dto.js'

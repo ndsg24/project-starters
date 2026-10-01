@@ -1,12 +1,10 @@
 package server
 
 import (
-	"net/http"
-
+	"example.com/go-api/internal/health"
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/danielgtaylor/huma/v2/adapters/humago"
-
-	"example.com/go-api/internal/health"
+	"net/http"
 )
 
 func NewHandler() http.Handler {

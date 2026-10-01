@@ -1,7 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
-
 import { PreferencesPanel } from '@/widgets/preferences'
 import { usePreferences } from '@/shared/preferences'
 import { themes, spacing, sizes } from '@/shared/theme'

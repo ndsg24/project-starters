@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next'
-
 import { usePreferences } from '@/shared/preferences'
 import { Button } from '@/shared/ui'
 

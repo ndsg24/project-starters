@@ -1,9 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-
 import type { ReactNode } from 'react'
-
 import { PreferencesProvider, browserPreferencesStore, usePreferences } from '@/shared/preferences'
 
 function DocumentPreferences() {

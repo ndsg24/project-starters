@@ -1,5 +1,4 @@
 import { StyleSheet, View } from 'react-native'
-
 import { languages, usePreferences } from '@/shared/preferences'
 import { Button } from '@/shared/ui'
 import { spacing } from '@/shared/theme'

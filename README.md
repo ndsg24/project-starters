@@ -117,16 +117,16 @@ rechaza destinos existentes.
 ### Descargar solamente un template, sin clonar el catálogo
 
 Ejecuta **solo la fila del proyecto que quieras crear**, desde la carpeta donde quieras guardarlo.
-Estos comandos descargan la versión publicada `v2.0.2` sin historial Git.
+Estos comandos descargan la versión publicada `v2.0.3` sin historial Git.
 
 | Proyecto            | Comando                                                                                |
 | ------------------- | -------------------------------------------------------------------------------------- |
-| Go API              | `npx giget@latest gh:ndsg24/project-starters/templates/go-api#v2.0.2 mi-api-go`        |
-| Node + Fastify      | `npx giget@latest gh:ndsg24/project-starters/templates/node-ts#v2.0.2 mi-api-node`     |
-| NestJS API          | `npx giget@latest gh:ndsg24/project-starters/templates/nest-api#v2.0.2 mi-api-nest`    |
-| React + Vite        | `npx giget@latest gh:ndsg24/project-starters/templates/react-vite#v2.0.2 mi-web-react` |
-| Next.js             | `npx giget@latest gh:ndsg24/project-starters/templates/next-app#v2.0.2 mi-web-next`    |
-| Expo / React Native | `npx giget@latest gh:ndsg24/project-starters/templates/expo-app#v2.0.2 mi-app-expo`    |
+| Go API              | `npx giget@latest gh:ndsg24/project-starters/templates/go-api#v2.0.3 mi-api-go`        |
+| Node + Fastify      | `npx giget@latest gh:ndsg24/project-starters/templates/node-ts#v2.0.3 mi-api-node`     |
+| NestJS API          | `npx giget@latest gh:ndsg24/project-starters/templates/nest-api#v2.0.3 mi-api-nest`    |
+| React + Vite        | `npx giget@latest gh:ndsg24/project-starters/templates/react-vite#v2.0.3 mi-web-react` |
+| Next.js             | `npx giget@latest gh:ndsg24/project-starters/templates/next-app#v2.0.3 mi-web-next`    |
+| Expo / React Native | `npx giget@latest gh:ndsg24/project-starters/templates/expo-app#v2.0.3 mi-app-expo`    |
 
 Después de la descarga, sustituye `mi-proyecto` por la carpeta que elegiste:
 
@@ -212,10 +212,10 @@ Los hooks son los de Actas Iglesia: lint-staged antes del commit, validación Co
 mediante scripts. ESLint no analiza Go; `gofmt`, `go vet`, tests con race detector y pruebas de
 imports lo complementan.
 
-El estilo común exige llaves en condiciones y bucles, imports agrupados y líneas en blanco entre
-miembros de clases, antes de retornos y alrededor de bloques y declaraciones multilínea.
-`pnpm lint:fix` aplica esas separaciones y `pnpm format` ajusta la presentación con Prettier. Go
-conserva imports agrupados y bloques separados siguiendo `gofmt`.
+El estilo común exige llaves en condiciones y bucles, imports juntos en un único bloque y líneas en
+blanco entre miembros de clases, antes de retornos y alrededor de bloques y declaraciones
+multilínea. `pnpm lint:fix` aplica esas separaciones y `pnpm format` ajusta la presentación con
+Prettier. Go conserva los imports juntos y los bloques separados siguiendo `gofmt`.
 
 ## Arquitectura y funcionalidades
 

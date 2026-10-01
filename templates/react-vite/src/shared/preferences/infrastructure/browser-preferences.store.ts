@@ -1,5 +1,4 @@
 import { defaultPreferences, parsePreferences } from '../domain/preferences'
-
 import type { Preferences } from '../domain/preferences'
 import type { PreferencesStorePort } from '../domain/preferences-store.port'
 

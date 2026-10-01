@@ -1,7 +1,6 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-
 import { usePreferences } from '@/shared/preferences'
 
 export function ThemeToggle() {

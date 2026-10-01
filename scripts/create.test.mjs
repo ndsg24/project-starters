@@ -3,7 +3,6 @@ import assert from 'node:assert/strict'
 import { mkdtemp, readFile, rm, stat } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-
 import { create, templates } from './create.mjs'
 
 test('all templates are standalone, renamed, and omit generated files', async () => {

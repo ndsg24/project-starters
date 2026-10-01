@@ -1,5 +1,4 @@
 import { AppProviders } from './providers/app-providers'
-
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import '@fontsource/manrope/latin.css'

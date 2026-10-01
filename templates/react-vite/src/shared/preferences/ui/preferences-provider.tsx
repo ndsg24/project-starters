@@ -2,11 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { I18nextProvider } from 'react-i18next'
-
 import { createI18n } from '../../i18n'
 import { defaultPreferences } from '../domain/preferences'
 import { PreferencesContext } from '../model/preferences-context'
-
 import type { Language, Preferences, ThemeName } from '../domain/preferences'
 import type { PreferencesProviderProps } from './preferences-provider.types'
 

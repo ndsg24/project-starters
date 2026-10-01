@@ -2,7 +2,6 @@ import { readFile, readdir } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 import assert from 'node:assert/strict'
-
 import { templates } from './create.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))

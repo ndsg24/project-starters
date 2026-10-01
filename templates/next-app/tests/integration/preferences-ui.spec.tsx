@@ -1,6 +1,5 @@
 /** @jest-environment jsdom */
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-
 import '@testing-library/jest-dom'
 import { PreferencesProvider } from '../../src/shared/preferences'
 import { HomePage } from '../../src/modules/home'

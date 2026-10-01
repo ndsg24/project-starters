@@ -1,7 +1,6 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-
 import { ThemeToggle } from '@/features/appearance'
 import { LanguageSelect } from '@/features/language'
 

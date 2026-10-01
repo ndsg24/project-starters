@@ -1,7 +1,6 @@
 import { readFile, readdir, writeFile, mkdir, chmod } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { join, dirname } from 'node:path'
-
 import { templates } from './create.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
