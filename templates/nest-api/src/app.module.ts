@@ -1,10 +1,6 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from '@nestjs/common'
+import { CqrsModule } from '@nestjs/cqrs'
+import { HealthModule } from './health/index.js'
 
-@Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
-})
+@Module({ imports: [CqrsModule.forRoot(), HealthModule] })
 export class AppModule {}

@@ -1,67 +1,82 @@
 # Project Starters
 
 [![CI](https://github.com/ndsg24/project-starters/actions/workflows/ci.yml/badge.svg)](https://github.com/ndsg24/project-starters/actions/workflows/ci.yml)
-![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 
-Templates independientes para pruebas, prototipos y proyectos nuevos. Cada carpeta incluye dependencias propias, documentación y un workflow de CI que viaja con el proyecto.
+Seis proyectos independientes con arquitectura y convenciones de Actas Iglesia.
 
-## Templates
+| Template                           | Arquitectura           | Base                               |
+| ---------------------------------- | ---------------------- | ---------------------------------- |
+| [go-api](templates/go-api)         | Hexagonal por contexto | Go + Huma/OpenAPI + Scalar + Bruno |
+| [node-ts](templates/node-ts)       | Hexagonal por contexto | Node + Fastify + Swagger + Bruno   |
+| [nest-api](templates/nest-api)     | Hexagonal + CQRS       | NestJS + Swagger + Bruno           |
+| [react-vite](templates/react-vite) | FSD adaptado           | React + Vite + temas + i18next     |
+| [next-app](templates/next-app)     | FSD adaptado           | Next App Router + temas + i18next  |
+| [expo-app](templates/expo-app)     | FSD adaptado           | Expo Router + temas + i18next      |
 
-| Template | Base | Validación |
-| --- | --- | --- |
-| [go-api](templates/go-api) | Go 1.25 + HTTP estándar | go vet, tests con race detector y build |
-| [node-ts](templates/node-ts) | Node 24 + TypeScript | tipos, node:test y build |
-| [nest-api](templates/nest-api) | NestJS + TypeScript | lint, tipos, unit tests, E2E y build |
-| [react-vite](templates/react-vite) | React + TypeScript + Vite | lint, tipos y build |
-| [next-app](templates/next-app) | Next.js + App Router | lint, tipos y build |
-| [expo-app](templates/expo-app) | Expo + Expo Router | lint, tipos y export web |
-
-## Crear un proyecto con nombre propio
-
-Clona el catálogo una sola vez. El generador no requiere instalar dependencias en la raíz:
+## Crear un proyecto
 
 ```bash
 git clone https://github.com/ndsg24/project-starters.git
 cd project-starters
-nvm use
-npm run create -- nest-api ../mi-prueba
-cd ../mi-prueba
-npm ci
-npm run dev
+pnpm run create nest-api ../mi-api
+cd ../mi-api
+git init -b main
+pnpm install --frozen-lockfile
+pnpm dev
 ```
 
-Lista las opciones con `npm run create -- --list`. El generador renombra el paquete y lockfile, el módulo Go o los identificadores básicos de Expo. No copia dependencias instaladas, historial Git, builds ni archivos `.env`; rechaza destinos existentes. Usa nombres en minúsculas con letras, números y guiones.
+`pnpm run create --list` muestra las opciones. El generador renombra el paquete,
+el módulo Go y la identidad básica de Expo. No copia builds, dependencias,
+`.env`, hooks generados ni historial Git y rechaza destinos existentes.
+Requiere Node 24 y pnpm 10.13.1; Go requiere además Go 1.25.
 
-## Copiar directamente desde GitHub
+También puedes descargar una carpeta:
 
 ```bash
 npx giget@latest gh:ndsg24/project-starters/templates/react-vite mi-prueba
-cd mi-prueba
-npm ci
-npm run dev
 ```
 
-Esta alternativa conserva los nombres del template. Ajústalos siguiendo su README. Para una copia reproducible, agrega `#v1.0.0` a la URI del template. giget requiere Node incluso para descargar el template de Go.
+Esta alternativa conserva los nombres originales. Fork y “Use this template”
+copian el catálogo completo. Las actualizaciones no se propagan a proyectos ya
+creados. Las versiones `v1.x` eran los scaffolds originales; `v2.0.0` incorpora
+arquitectura, API tooling y preferencias.
 
-## Publicar tu proyecto nuevo
+## Convenciones idénticas
 
-Desde el proyecto generado:
+`conventions/` es la fuente canónica para los seis templates: Husky, Commitlint,
+Prettier, ESLint, lint-staged y versiones de herramientas. Cada template lleva
+su copia completa, sin imports al catálogo. `pnpm verify:conventions` y CI
+comparan archivos y versiones para detectar divergencias.
 
-```bash
-git init -b main
-git add .
-git commit -m "chore: initialize project"
-gh repo create mi-prueba --private --source=. --remote=origin --push
-```
+Los hooks son los de Actas Iglesia: lint-staged antes del commit, validación
+Conventional Commits y `pnpm test && pnpm typecheck` antes del push. Los adapters
+y checks de plataforma se agregan mediante scripts. ESLint no analiza Go;
+`gofmt`, `go vet`, tests con race detector y pruebas de imports lo complementan.
 
-GitHub no permite hacer fork de una carpeta. Fork y “Use this template” copian el catálogo completo; usa el generador o giget para obtener un proyecto individual. Las mejoras futuras de este catálogo no se aplican automáticamente a las copias.
+## Arquitectura y funcionalidades
 
-## Organización y mantenimiento
+Backend: dominio puro, puertos, casos de uso, adaptadores, controllers y
+presenters por contexto. Health muestra una acción completa. Nest usa CQRS.
+Las tres APIs exponen `/health`, `/openapi.json` y `/docs`, e incluyen Bruno.
 
-- `templates/`: proyectos autónomos, sin workspace compartido.
-- `scripts/`: generador local y pruebas de aislamiento.
-- `.github/`: CI del catálogo, Dependabot y configuración de contribuciones.
+Frontend: `app`, `modules`, `widgets`, `features`, `shared`, con APIs públicas e
+imports descendentes. Dark y español son los valores iniciales; light/dark y
+es/en/pt se cambian desde la UI y se conservan en el dispositivo. La UI usa
+Manrope y tokens semánticos inspirados en Clerity.
 
-CI valida copias aisladas de los cinco templates Node, el template Go y el generador en cada PR y push a `main`. Dependabot propone actualizaciones semanales. En Expo actualiza automáticamente solo dependencias de desarrollo: actualiza el SDK y sus módulos en conjunto con las herramientas oficiales (`npx expo install --fix`). Los frontends tienen lint, tipos y build; agrega pruebas funcionales cuando implementes comportamiento. Expo valida la exportación web; APK/IPA requieren configuración y validación nativa adicional.
+## Validación y mantenimiento
 
-Consulta [CONTRIBUTING.md](CONTRIBUTING.md) y [SECURITY.md](SECURITY.md). Licencia MIT; los avisos de los scaffolds originales se conservan.
+CI genera copias fuera del catálogo, instala con lockfile y ejecuta lint,
+formato, tipos, pruebas y build. Las APIs prueban contratos reales con Bruno.
+Expo valida web y bundles JS de iOS/Android, no firma ni ejecución en dispositivo.
+La CI también comprueba temas, idiomas, persistencia y responsive en Chrome.
+Los tests protegen límites arquitectónicos, claves i18n, preferencias y el
+generador. Cada copia también trae su workflow independiente.
+
+Para mantener configs idénticas, cambia `conventions/`, ejecuta `pnpm sync:conventions` para sincronizar sus archivos
+con los seis templates y ejecuta `pnpm test`. Las actualizaciones de herramientas
+comunes deben aplicarse a los seis a la vez. Dependabot propone actualizaciones;
+revisa y coordina cambios en Expo mediante `pnpm exec expo install --fix`.
+
+Consulta [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md) y los
+README de cada template. MIT, conservando avisos originales.

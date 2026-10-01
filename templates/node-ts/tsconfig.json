@@ -8,14 +8,7 @@
     "outDir": "dist",
     "skipLibCheck": true,
     "noUncheckedIndexedAccess": true,
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "src/**/*.test.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }

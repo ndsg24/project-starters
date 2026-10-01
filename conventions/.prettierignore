@@ -1,0 +1,12 @@
+node_modules/
+dist/
+bin/
+coverage/
+.next/
+.expo/
+assets/
+pnpm-lock.yaml
+*.go
+go.sum
+next-env.d.ts
+expo-env.d.ts

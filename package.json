@@ -1,13 +1,22 @@
 {
   "name": "@ndsg24/project-starters",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "engines": {
     "node": ">=24"
   },
+  "packageManager": "pnpm@10.13.1",
   "scripts": {
     "create": "node scripts/create.mjs",
-    "test": "node --test scripts/*.test.mjs"
+    "test": "node --test scripts/*.test.mjs",
+    "verify:conventions": "node scripts/verify-conventions.mjs",
+    "sync:conventions": "node scripts/sync-conventions.mjs",
+    "test:browser": "node scripts/browser-smoke.mjs",
+    "sync:tool-versions": "node scripts/sync-tool-versions.mjs"
+  },
+  "devDependencies": {
+    "eslint": "9.31.0",
+    "puppeteer-core": "25.4.0"
   }
 }

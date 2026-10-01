@@ -6,3 +6,6 @@ coverage/
 !.env.example
 .DS_Store
 *.tsbuildinfo
+
+.husky/_/
+dist-native/

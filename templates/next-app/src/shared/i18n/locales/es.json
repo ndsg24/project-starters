@@ -1,0 +1,15 @@
+{
+  "title": "Tu próximo proyecto empieza aquí.",
+  "description": "Una base ordenada para construir, probar y aprender.",
+  "preferences": "Preferencias",
+  "language": "Idioma",
+  "appearance": "Apariencia",
+  "light": "Claro",
+  "dark": "Oscuro",
+  "switchTheme": "Cambiar tema",
+  "ready": "Listo para empezar",
+  "architecture": "Responsabilidades claras, desde el primer día.",
+  "architectureDescription": "Rutas delgadas, features independientes y una API pública por módulo.",
+  "persistence": "Tus preferencias se conservan en este dispositivo.",
+  "home": "Inicio"
+}
