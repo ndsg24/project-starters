@@ -37,7 +37,7 @@ pnpm run create go-api ../mi-api-go
 cd ../mi-api-go
 git init -b main
 pnpm install --frozen-lockfile
-pnpm setup
+pnpm run setup
 pnpm dev
 ```
 
@@ -51,7 +51,7 @@ pnpm run create node-ts ../mi-api-node
 cd ../mi-api-node
 git init -b main
 pnpm install --frozen-lockfile
-pnpm setup
+pnpm run setup
 pnpm dev
 ```
 
@@ -65,7 +65,7 @@ pnpm run create nest-api ../mi-api-nest
 cd ../mi-api-nest
 git init -b main
 pnpm install --frozen-lockfile
-pnpm setup
+pnpm run setup
 pnpm dev
 ```
 
@@ -79,7 +79,7 @@ pnpm run create react-vite ../mi-web-react
 cd ../mi-web-react
 git init -b main
 pnpm install --frozen-lockfile
-pnpm setup
+pnpm run setup
 pnpm dev
 ```
 
@@ -93,7 +93,7 @@ pnpm run create next-app ../mi-web-next
 cd ../mi-web-next
 git init -b main
 pnpm install --frozen-lockfile
-pnpm setup
+pnpm run setup
 pnpm dev
 ```
 
@@ -107,7 +107,7 @@ pnpm run create expo-app ../mi-app-expo
 cd ../mi-app-expo
 git init -b main
 pnpm install --frozen-lockfile
-pnpm setup
+pnpm run setup
 pnpm dev
 ```
 
@@ -140,7 +140,7 @@ Después de la descarga, sustituye `mi-proyecto` por la carpeta que elegiste:
 cd mi-proyecto
 git init -b main
 pnpm install --frozen-lockfile
-pnpm setup
+pnpm run setup
 pnpm dev
 ```
 
@@ -210,7 +210,7 @@ arquitectura, API tooling y preferencias.
 
 ## Infraestructura lista para desarrollar
 
-Después de instalar, `pnpm setup` crea `.env` si no existe. En las APIs levanta PostgreSQL con
+Después de instalar, `pnpm run setup` crea `.env` si no existe. En las APIs levanta PostgreSQL con
 Docker Compose y verifica la conexión; en los frontends prepara las variables de la API. Requiere
 Docker Desktop/Engine con Compose v2 para usar contenedores. Las APIs usan el puerto 4000; sus
 frontends usan 5173, 3000 y 8081.
@@ -236,7 +236,7 @@ pnpm docker:logs
 pnpm docker:down
 ```
 
-En las APIs, `pnpm setup` inicia solo PostgreSQL. `pnpm docker:up` activa el perfil `app` para
+En las APIs, `pnpm run setup` inicia solo PostgreSQL. `pnpm docker:up` activa el perfil `app` para
 iniciar PostgreSQL y la API compilada, esperando sus healthchecks. Los volúmenes conservan la BD
 después de `docker:down`. Para ejecutar la API en el host usa `pnpm dev` con PostgreSQL activo.
 

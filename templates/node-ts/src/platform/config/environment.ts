@@ -5,7 +5,7 @@ export function readConfig() {
   const port = Number(process.env.PORT ?? 4000)
 
   if (!databaseUrl) {
-    throw new Error('DATABASE_URL is required. Run pnpm setup.')
+    throw new Error('DATABASE_URL is required. Run pnpm run setup.')
   }
 
   let parsed: URL

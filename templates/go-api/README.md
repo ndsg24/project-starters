@@ -10,7 +10,7 @@ Requiere Node 24 y pnpm 10.13.1.
 nvm use
 corepack enable
 pnpm install --frozen-lockfile
-pnpm setup
+pnpm run setup
 git init -b main
 pnpm prepare
 pnpm dev
@@ -109,7 +109,7 @@ Licencia MIT. Conserva los avisos de copyright originales.
 
 ## Entorno y Docker Compose
 
-`pnpm setup` crea `.env` sin sobrescribirlo. Ejecuta `pnpm docker:up` para construir los
+`pnpm run setup` crea `.env` sin sobrescribirlo. Ejecuta `pnpm docker:up` para construir los
 contenedores y esperar sus healthchecks; `pnpm docker:logs` muestra logs y `pnpm docker:down` los
 detiene. Requiere Docker con Compose v2. No se crean modelos, CRUDs ni datos de ejemplo.
 

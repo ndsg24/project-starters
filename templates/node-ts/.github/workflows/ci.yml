@@ -39,7 +39,7 @@ jobs:
           node-version-file: .nvmrc
       - run: npm install --global pnpm@10.13.1
       - run: pnpm install --frozen-lockfile
-      - run: pnpm setup --env-only
+      - run: pnpm run setup --env-only
       - run: docker compose config --quiet
       - run: pnpm check
       - run: pnpm test:integration

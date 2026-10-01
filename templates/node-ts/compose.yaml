@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-starter}
       POSTGRES_DB: ${POSTGRES_DB:-starter}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run pnpm setup first}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run pnpm run setup first}
     ports:
       - '127.0.0.1:${POSTGRES_PORT:-5432}:5432'
     volumes:

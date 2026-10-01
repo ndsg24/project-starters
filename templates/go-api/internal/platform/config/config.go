@@ -23,7 +23,7 @@ func Load() (Config, error) {
 	cfg := Config{DatabaseURL: os.Getenv("DATABASE_URL"), Port: os.Getenv("PORT"), Host: os.Getenv("HOST")}
 	parsed, err := url.Parse(cfg.DatabaseURL)
 	if err != nil || cfg.DatabaseURL == "" || (parsed.Scheme != "postgres" && parsed.Scheme != "postgresql") {
-		return Config{}, errors.New("DATABASE_URL must be a PostgreSQL URL; run pnpm setup")
+		return Config{}, errors.New("DATABASE_URL must be a PostgreSQL URL; run pnpm run setup")
 	}
 	if cfg.Port == "" {
 		cfg.Port = "4000"

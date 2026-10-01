@@ -43,7 +43,7 @@ jobs:
           go-version-file: go.mod
           cache-dependency-path: go.sum
       - run: pnpm install --frozen-lockfile
-      - run: pnpm setup --env-only
+      - run: pnpm run setup --env-only
       - run: docker compose config --quiet
       - run: pnpm check
       - run: pnpm test:integration

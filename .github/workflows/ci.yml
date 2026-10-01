@@ -63,7 +63,7 @@ jobs:
       - run: pnpm --dir "$DESTINATION" install --frozen-lockfile
       - name: Validate Compose configuration
         run: |
-          pnpm --dir "$DESTINATION" setup --env-only
+          pnpm --dir "$DESTINATION" run setup --env-only
           cd "$DESTINATION"
           docker compose config --quiet
       - run: pnpm --dir "$DESTINATION" check
@@ -135,7 +135,7 @@ jobs:
       - run: pnpm --dir "$DESTINATION" install --frozen-lockfile
       - name: Validate Compose configuration
         run: |
-          pnpm --dir "$DESTINATION" setup --env-only
+          pnpm --dir "$DESTINATION" run setup --env-only
           cd "$DESTINATION"
           docker compose config --quiet
       - run: pnpm --dir "$DESTINATION" check
