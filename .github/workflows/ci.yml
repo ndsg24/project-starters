@@ -32,7 +32,7 @@ jobs:
       CI: 'true'
       NEXT_TELEMETRY_DISABLED: '1'
       EXPO_NO_TELEMETRY: '1'
-      DESTINATION: ${{ runner.temp }}/starter-${{ matrix.template }}
+      DESTINATION: /tmp/starter-${{ matrix.template }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -46,7 +46,7 @@ jobs:
         working-directory: .
         env:
           TEMPLATE: ${{ matrix.template }}
-          DESTINATION: ${{ runner.temp }}/starter-${{ matrix.template }}
+          DESTINATION: /tmp/starter-${{ matrix.template }}
         run: node scripts/create.mjs "$TEMPLATE" "$DESTINATION"
       - run: npm --prefix "$DESTINATION" ci
       - run: npm --prefix "$DESTINATION" run check
