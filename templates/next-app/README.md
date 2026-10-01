@@ -84,10 +84,12 @@ Licencia MIT. Conserva los avisos de copyright originales.
 contenedores y esperar sus healthchecks; `pnpm docker:logs` muestra logs y `pnpm docker:down` los
 detiene. Requiere Docker con Compose v2. No se crean modelos, CRUDs ni datos de ejemplo.
 
-Compose ejecuta desarrollo web con el código montado. El cliente HTTP está en `shared/api` y admite
-timeout, cancelación, cabeceras, body JSON y un decoder opcional para validar respuestas. `ApiError`
-normaliza fallos HTTP/red/timeout. TanStack Query ya está montado en los providers, con caché y
-reintentos limitados para consultas; las mutaciones no se reintentan automáticamente.
+Compose ejecuta desarrollo web con el código montado. El cliente HTTP usa Axios mediante la clase
+`HttpClient`, está en `shared/api` y admite timeout, cancelación, cabeceras, body JSON y un decoder
+opcional para validar respuestas. Expone `request`, `get`, `post`, `put`, `patch` y `delete`, con
+parámetros de consulta y credenciales configurables por petición. `ApiError` normaliza fallos
+HTTP/red/timeout. TanStack Query ya está montado en los providers, con caché y reintentos limitados
+para consultas; las mutaciones no se reintentan automáticamente.
 
 Configura `NEXT_PUBLIC_API_URL` en `.env` (por defecto `http://localhost:4000`). Para servidor
 importa `createServerApi` de `@/shared/server-api`; usa `API_URL` y está aislado con `server-only`.

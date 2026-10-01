@@ -123,16 +123,16 @@ rechaza destinos existentes.
 ### Descargar solamente un template, sin clonar el catálogo
 
 Ejecuta **solo la fila del proyecto que quieras crear**, desde la carpeta donde quieras guardarlo.
-Estos comandos descargan la versión publicada `v2.1.0` sin historial Git.
+Estos comandos descargan la versión publicada `v2.1.1` sin historial Git.
 
 | Proyecto            | Comando                                                                                |
 | ------------------- | -------------------------------------------------------------------------------------- |
-| Go API              | `npx giget@latest gh:ndsg24/project-starters/templates/go-api#v2.1.0 mi-api-go`        |
-| Node + Fastify      | `npx giget@latest gh:ndsg24/project-starters/templates/node-ts#v2.1.0 mi-api-node`     |
-| NestJS API          | `npx giget@latest gh:ndsg24/project-starters/templates/nest-api#v2.1.0 mi-api-nest`    |
-| React + Vite        | `npx giget@latest gh:ndsg24/project-starters/templates/react-vite#v2.1.0 mi-web-react` |
-| Next.js             | `npx giget@latest gh:ndsg24/project-starters/templates/next-app#v2.1.0 mi-web-next`    |
-| Expo / React Native | `npx giget@latest gh:ndsg24/project-starters/templates/expo-app#v2.1.0 mi-app-expo`    |
+| Go API              | `npx giget@latest gh:ndsg24/project-starters/templates/go-api#v2.1.1 mi-api-go`        |
+| Node + Fastify      | `npx giget@latest gh:ndsg24/project-starters/templates/node-ts#v2.1.1 mi-api-node`     |
+| NestJS API          | `npx giget@latest gh:ndsg24/project-starters/templates/nest-api#v2.1.1 mi-api-nest`    |
+| React + Vite        | `npx giget@latest gh:ndsg24/project-starters/templates/react-vite#v2.1.1 mi-web-react` |
+| Next.js             | `npx giget@latest gh:ndsg24/project-starters/templates/next-app#v2.1.1 mi-web-next`    |
+| Expo / React Native | `npx giget@latest gh:ndsg24/project-starters/templates/expo-app#v2.1.1 mi-app-expo`    |
 
 Después de la descarga, sustituye `mi-proyecto` por la carpeta que elegiste:
 
@@ -215,13 +215,13 @@ Docker Compose y verifica la conexión; en los frontends prepara las variables d
 Docker Desktop/Engine con Compose v2 para usar contenedores. Las APIs usan el puerto 4000; sus
 frontends usan 5173, 3000 y 8081.
 
-| Templates          | Configuración                                                                                                                        |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Node y Nest        | Prisma 7, PostgreSQL, cliente generado automáticamente, pool, cierre de conexiones y comandos de migración. Schema sin modelos.      |
-| Go                 | pgx, PostgreSQL, pool y golang-migrate. Carpeta de migraciones vacía.                                                                |
-| React, Next y Expo | Cliente HTTP en `shared/api`, timeout, cancelación, errores normalizados y TanStack Query integrado en providers.                    |
-| Next               | Cliente de navegador por `NEXT_PUBLIC_API_URL`; cliente de servidor en `shared/server-api` por `API_URL`, aislado con `server-only`. |
-| Expo               | Foco y conectividad nativa conectados a TanStack Query.                                                                              |
+| Templates          | Configuración                                                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Node y Nest        | Prisma 7, PostgreSQL, cliente generado automáticamente, pool, cierre de conexiones y comandos de migración. Schema sin modelos.                  |
+| Go                 | pgx, PostgreSQL, pool y golang-migrate. Carpeta de migraciones vacía.                                                                            |
+| React, Next y Expo | Cliente HTTP con Axios y clase `HttpClient` en `shared/api`, timeout, cancelación, errores normalizados y TanStack Query integrado en providers. |
+| Next               | Cliente de navegador por `NEXT_PUBLIC_API_URL`; cliente de servidor en `shared/server-api` por `API_URL`, aislado con `server-only`.             |
+| Expo               | Foco y conectividad nativa conectados a TanStack Query.                                                                                          |
 
 No se agregan CRUDs, modelos, seeds ni consultas de negocio. Las conexiones se verifican con
 `SELECT 1`. Define tus modelos/contratos cuando empieces tu feature.

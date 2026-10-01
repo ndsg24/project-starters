@@ -1,3 +1,3 @@
-import { createHttpClient } from './lib/http-client'
+import { HttpClient } from './lib/http-client'
 
-export const api = createHttpClient(process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:4000')
+export const api = new HttpClient(process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:4000')

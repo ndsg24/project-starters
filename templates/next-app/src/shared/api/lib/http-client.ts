@@ -1,3 +1,5 @@
+import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios'
+
 export type ApiErrorKind = 'http' | 'network' | 'timeout' | 'cancelled' | 'response'
 
 export class ApiError extends Error {
@@ -12,105 +14,134 @@ export class ApiError extends Error {
   }
 }
 
-export interface HttpOptions<T> extends Omit<RequestInit, 'body'> {
+export interface HttpOptions<T = unknown>
+  extends Pick<AxiosRequestConfig, 'method' | 'headers' | 'params' | 'signal' | 'withCredentials'> {
   body?: unknown
   timeoutMs?: number
   decode?: (value: unknown) => T
 }
 
-export function createHttpClient(baseUrl: string, defaultTimeoutMs = 15000) {
-  const base = new URL(baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`)
+export class HttpClient {
+  private readonly base: URL
 
-  if (!['http:', 'https:'].includes(base.protocol) || base.username || base.password) {
-    throw new Error('API URL must be an HTTP URL without credentials')
+  private readonly instance: AxiosInstance
+
+  constructor(
+    baseUrl: string,
+    private readonly defaultTimeoutMs = 15000,
+  ) {
+    this.base = new URL(baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`)
+
+    if (
+      !['http:', 'https:'].includes(this.base.protocol) ||
+      this.base.username ||
+      this.base.password
+    ) {
+      throw new Error('API URL must be an HTTP URL without credentials')
+    }
+
+    this.validateTimeout(defaultTimeoutMs)
+
+    this.instance = axios.create({
+      baseURL: this.base.toString(),
+      timeout: defaultTimeoutMs,
+      headers: { Accept: 'application/json' },
+      responseType: 'json',
+      transitional: { silentJSONParsing: false, clarifyTimeoutError: true },
+      maxRedirects: 0,
+    })
   }
 
-  if (!Number.isFinite(defaultTimeoutMs) || defaultTimeoutMs <= 0) {
-    throw new Error('HTTP timeout must be positive')
-  }
+  async request<T = unknown>(path: string, options: HttpOptions<T> = {}): Promise<T> {
+    const url = new URL(path.replace(/^\/+/, ''), this.base)
 
-  return {
-    async request<T = unknown>(path: string, options: HttpOptions<T> = {}): Promise<T> {
-      const url = new URL(path.replace(/^\/+/, ''), base)
+    if (
+      url.origin !== this.base.origin ||
+      !url.pathname.startsWith(this.base.pathname) ||
+      url.username ||
+      url.password
+    ) {
+      throw new Error('Request path must stay within the configured API')
+    }
 
-      if (url.origin !== base.origin || !url.pathname.startsWith(base.pathname)) {
-        throw new Error('Request path must stay within the configured API')
+    const { body, timeoutMs = this.defaultTimeoutMs, decode, ...config } = options
+
+    this.validateTimeout(timeoutMs)
+
+    try {
+      const response = await this.instance.request<unknown>({
+        ...config,
+        url: url.toString(),
+        data: body,
+        timeout: timeoutMs,
+      })
+
+      const value = response.status === 204 || response.data === '' ? undefined : response.data
+
+      if (decode) {
+        try {
+          return decode(value)
+        } catch {
+          throw new ApiError('response', 'API response failed validation', response.status)
+        }
       }
 
-      const { body, signal, timeoutMs = defaultTimeoutMs, decode, ...init } = options
-
-      if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) {
-        throw new Error('HTTP timeout must be positive')
+      return value as T
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error
       }
 
-      const controller = new AbortController()
-      const cancel = () => controller.abort()
-      let timedOut = false
-
-      const timer = setTimeout(() => {
-        timedOut = true
-        controller.abort()
-      }, timeoutMs)
-
-      signal?.addEventListener('abort', cancel, { once: true })
-
-      if (signal?.aborted) {
-        controller.abort()
+      if (axios.isCancel(error)) {
+        throw new ApiError('cancelled', 'Request cancelled')
       }
 
-      try {
-        const headers = new Headers(init.headers)
-
-        headers.set('Accept', 'application/json')
-
-        if (body !== undefined) {
-          headers.set('Content-Type', 'application/json')
+      if (axios.isAxiosError(error)) {
+        if (error.code === AxiosError.ETIMEDOUT || error.code === AxiosError.ECONNABORTED) {
+          throw new ApiError('timeout', 'Request timed out')
         }
 
-        const response = await fetch(url.toString(), {
-          ...init,
-          headers,
-          body: body === undefined ? undefined : JSON.stringify(body),
-          signal: controller.signal,
-        })
-
-        const text = await response.text()
-        let value: unknown = undefined
-
-        if (text) {
-          if (response.headers.get('content-type')?.includes('json')) {
-            try {
-              value = JSON.parse(text)
-            } catch {
-              throw new ApiError('response', 'API returned invalid JSON', response.status)
-            }
-          } else {
-            value = text
-          }
+        if (error.cause instanceof SyntaxError) {
+          throw new ApiError('response', 'API returned invalid JSON', error.response?.status)
         }
 
-        if (!response.ok) {
-          throw new ApiError('http', `HTTP ${response.status}`, response.status, value)
-        }
-
-        return decode ? decode(value) : (value as T)
-      } catch (error) {
-        if (error instanceof ApiError) {
-          throw error
-        }
-
-        if (controller.signal.aborted) {
+        if (error.response) {
           throw new ApiError(
-            timedOut ? 'timeout' : 'cancelled',
-            timedOut ? 'Request timed out' : 'Request cancelled',
+            'http',
+            `HTTP ${error.response.status}`,
+            error.response.status,
+            error.response.data,
           )
         }
-
-        throw new ApiError('network', 'API request failed')
-      } finally {
-        clearTimeout(timer)
-        signal?.removeEventListener('abort', cancel)
       }
-    },
+
+      throw new ApiError('network', 'API request failed')
+    }
+  }
+
+  get<T = unknown>(path: string, options: HttpOptions<T> = {}): Promise<T> {
+    return this.request(path, { ...options, method: 'GET' })
+  }
+
+  post<T = unknown>(path: string, body?: unknown, options: HttpOptions<T> = {}): Promise<T> {
+    return this.request(path, { ...options, body, method: 'POST' })
+  }
+
+  put<T = unknown>(path: string, body?: unknown, options: HttpOptions<T> = {}): Promise<T> {
+    return this.request(path, { ...options, body, method: 'PUT' })
+  }
+
+  patch<T = unknown>(path: string, body?: unknown, options: HttpOptions<T> = {}): Promise<T> {
+    return this.request(path, { ...options, body, method: 'PATCH' })
+  }
+
+  delete<T = unknown>(path: string, options: HttpOptions<T> = {}): Promise<T> {
+    return this.request(path, { ...options, method: 'DELETE' })
+  }
+
+  private validateTimeout(timeoutMs: number): void {
+    if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) {
+      throw new Error('HTTP timeout must be positive')
+    }
   }
 }
