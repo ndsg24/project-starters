@@ -1,8 +1,10 @@
 import { defaultPreferences, parsePreferences } from '../domain/preferences'
+
 import type { Preferences } from '../domain/preferences'
 import type { PreferencesStorePort } from '../domain/preferences-store.port'
 
 const KEY = 'starter-preferences'
+
 export const browserPreferencesStore: PreferencesStorePort = {
   async load() {
     try {

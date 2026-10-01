@@ -1,10 +1,12 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
+
 import { PreferencesPanel } from '@/widgets/preferences'
 
 export function HomePage() {
   const { t } = useTranslation()
+
   return (
     <main className="shell">
       <header className="masthead">

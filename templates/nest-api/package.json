@@ -64,7 +64,8 @@
     "eslint-plugin-react-hooks": "5.2.0",
     "husky": "9.1.7",
     "lint-staged": "16.1.2",
-    "@usebruno/cli": "4.2.0"
+    "@usebruno/cli": "4.2.0",
+    "@stylistic/eslint-plugin": "5.10.0"
   },
   "engines": {
     "node": ">=24"

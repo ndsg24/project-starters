@@ -42,7 +42,8 @@
     "jest": "29.7.0",
     "@types/jest": "29.5.14",
     "ts-jest": "29.2.6",
-    "@usebruno/cli": "4.2.0"
+    "@usebruno/cli": "4.2.0",
+    "@stylistic/eslint-plugin": "5.10.0"
   },
   "packageManager": "pnpm@10.13.1",
   "license": "MIT",

@@ -1,6 +1,7 @@
+import { AppProviders } from './providers/app-providers'
+
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
-import { AppProviders } from './providers/app-providers'
 import '@fontsource/manrope/latin.css'
 import '@/shared/theme'
 

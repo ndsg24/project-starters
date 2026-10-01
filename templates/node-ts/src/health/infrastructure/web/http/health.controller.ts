@@ -1,6 +1,7 @@
+import { presentHealth } from '../../mappers/health.presenter.js'
+
 import type { FastifyInstance } from 'fastify'
 import type { GetHealthHandler } from '../../../application/queries/get-health/get-health.handler.js'
-import { presentHealth } from '../../mappers/health.presenter.js'
 
 export function registerHealthController(server: FastifyInstance, handler: GetHealthHandler): void {
   server.get(
