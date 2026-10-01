@@ -1,0 +1,46 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /templates/node-ts
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      development:
+        dependency-type: development
+  - package-ecosystem: npm
+    directory: /templates/nest-api
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      development:
+        dependency-type: development
+  - package-ecosystem: npm
+    directory: /templates/react-vite
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      development:
+        dependency-type: development
+  - package-ecosystem: npm
+    directory: /templates/next-app
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      development:
+        dependency-type: development
+  - package-ecosystem: npm
+    directory: /templates/expo-app
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      development:
+        dependency-type: development
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

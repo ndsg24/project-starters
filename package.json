@@ -1,0 +1,13 @@
+{
+  "name": "@ndsg24/project-starters",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "create": "node scripts/create.mjs",
+    "test": "node --test scripts/*.test.mjs"
+  }
+}

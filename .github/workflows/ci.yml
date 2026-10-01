@@ -1,0 +1,72 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  generator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+      - run: npm test
+  node:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        template: [node-ts, nest-api, react-vite, next-app, expo-app]
+    env:
+      CI: 'true'
+      NEXT_TELEMETRY_DISABLED: '1'
+      EXPO_NO_TELEMETRY: '1'
+    defaults:
+      run:
+        working-directory: ${{ runner.temp }}/starter-${{ matrix.template }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: templates/${{ matrix.template }}/package-lock.json
+      - name: Generate an isolated project
+        working-directory: .
+        env:
+          TEMPLATE: ${{ matrix.template }}
+          DESTINATION: ${{ runner.temp }}/starter-${{ matrix.template }}
+        run: node scripts/create.mjs "$TEMPLATE" "$DESTINATION"
+      - run: npm ci
+      - run: npm run check
+      - run: npm audit --audit-level=high
+  go:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: templates/go-api
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: templates/go-api/go.mod
+          cache: false
+      - run: test -z "$(gofmt -l .)"
+      - run: make check
+      - run: make build
