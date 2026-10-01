@@ -1,11 +1,14 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
+
 import { usePreferences } from '../../preferences'
 import { themes, spacing, sizes } from '../../theme'
+
 import type { ButtonProps } from './button.types'
 
 export function Button({ label, accessibilityLabel, disabled, selected, onPress }: ButtonProps) {
   const { preferences } = usePreferences()
   const theme = themes[preferences.theme]
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -25,6 +28,7 @@ export function Button({ label, accessibilityLabel, disabled, selected, onPress 
     </Pressable>
   )
 }
+
 const styles = StyleSheet.create({
   control: {
     minHeight: sizes.control,

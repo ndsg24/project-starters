@@ -25,7 +25,8 @@
     "ts-jest": "29.2.6",
     "typescript": "5.8.3",
     "@types/node": "24.0.14",
-    "@usebruno/cli": "4.2.0"
+    "@usebruno/cli": "4.2.0",
+    "@stylistic/eslint-plugin": "5.10.0"
   },
   "scripts": {
     "prepare": "node tooling/prepare.mjs",

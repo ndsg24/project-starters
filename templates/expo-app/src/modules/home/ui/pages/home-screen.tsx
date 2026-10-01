@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
+
 import { PreferencesPanel } from '@/widgets/preferences'
 import { usePreferences } from '@/shared/preferences'
 import { themes, spacing, sizes } from '@/shared/theme'
@@ -9,6 +10,7 @@ export function HomeScreen() {
   const { t } = useTranslation()
   const { preferences } = usePreferences()
   const theme = themes[preferences.theme]
+
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.canvas }]}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -37,6 +39,7 @@ export function HomeScreen() {
     </SafeAreaView>
   )
 }
+
 const styles = StyleSheet.create({
   safe: { flex: 1 },
   container: { padding: spacing.xl, alignItems: 'center' },

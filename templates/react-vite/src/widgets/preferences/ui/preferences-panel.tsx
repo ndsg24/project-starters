@@ -1,11 +1,13 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
+
 import { ThemeToggle } from '@/features/appearance'
 import { LanguageSelect } from '@/features/language'
 
 export function PreferencesPanel() {
   const { t } = useTranslation()
+
   return (
     <section className="preferences-panel" aria-label={t('preferences')}>
       <div>

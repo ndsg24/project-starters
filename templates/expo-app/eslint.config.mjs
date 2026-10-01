@@ -1,9 +1,11 @@
+import stylistic from '@stylistic/eslint-plugin'
 import js from '@eslint/js'
 import prettier from 'eslint-config-prettier'
 import importPlugin from 'eslint-plugin-import'
 import reactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
+
 import architecture from './tooling/eslint-boundaries.mjs'
 
 export default tseslint.config(
@@ -43,4 +45,40 @@ export default tseslint.config(
   },
   { files: ['**/*.cjs'], rules: { '@typescript-eslint/no-require-imports': 'off' } },
   prettier,
+  {
+    files: ['**/*.{js,mjs,cjs,ts,tsx}'],
+    plugins: { '@stylistic': stylistic },
+    rules: {
+      curly: ['error', 'all'],
+      'import/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'type'],
+          'newlines-between': 'always',
+        },
+      ],
+      '@stylistic/lines-between-class-members': ['error', 'always'],
+      '@stylistic/padding-line-between-statements': [
+        'error',
+        { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+        { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] },
+        {
+          blankLine: 'always',
+          prev: '*',
+          next: ['return', 'throw', 'if', 'for', 'while', 'switch', 'try'],
+        },
+        { blankLine: 'always', prev: 'block-like', next: '*' },
+        {
+          blankLine: 'always',
+          prev: ['multiline-const', 'multiline-let', 'multiline-expression'],
+          next: '*',
+        },
+        {
+          blankLine: 'always',
+          prev: '*',
+          next: ['multiline-const', 'multiline-let', 'multiline-expression'],
+        },
+      ],
+    },
+  },
 )

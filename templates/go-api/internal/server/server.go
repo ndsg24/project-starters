@@ -1,10 +1,12 @@
 package server
 
 import (
-	"example.com/go-api/internal/health"
+	"net/http"
+
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/danielgtaylor/huma/v2/adapters/humago"
-	"net/http"
+
+	"example.com/go-api/internal/health"
 )
 
 func NewHandler() http.Handler {
@@ -13,5 +15,6 @@ func NewHandler() http.Handler {
 	config.OpenAPIPath = "/openapi"
 	api := humago.New(mux, config)
 	health.Register(api)
+
 	return mux
 }

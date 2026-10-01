@@ -1,7 +1,5 @@
-import { test } from "node:test";
-import { verifyConventions } from "./verify-conventions.mjs";
+import { test } from 'node:test'
 
-test(
-  "Should keep tooling identical across all six templates",
-  verifyConventions,
-);
+import { verifyConventions } from './verify-conventions.mjs'
+
+test('Should keep tooling identical across all six templates', verifyConventions)
