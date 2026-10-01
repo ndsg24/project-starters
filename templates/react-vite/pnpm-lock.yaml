@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@fontsource/manrope':
-        specifier: 5.2.6
-        version: 5.2.6
+        specifier: 5.3.0
+        version: 5.3.0
       '@tanstack/react-query':
         specifier: 5.104.0
         version: 5.104.0(react@19.3.0)
@@ -387,8 +387,8 @@ packages:
     resolution: {integrity: sha512-Z5kJ+wU3oA7MMIqVR9tyZRtjYPr4OC004Q4Rw7pgOKUOKkJfZ3O24nz3WYfGRpMDNmcOi3TwQOmgm7B7Tpii0w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@fontsource/manrope@5.2.6':
-    resolution: {integrity: sha512-tboCPLGXWWkNORL7gRhA1m16FJj2QuObk2lhBvkNrpjW0911pGawvHwxuierKHojPtXptfMJo7CUWxXGkKN5zA==}
+  '@fontsource/manrope@5.3.0':
+    resolution: {integrity: sha512-obJ1Dv3+uCA6HlHgW8u4BGYxJR9In2HW7gjJhlflEvkrj1X1iSEwu0fToL+JYGC/FEKFfIz1sBuPduvcL2gIAA==}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -1390,6 +1390,7 @@ packages:
   eslint@9.31.0:
     resolution: {integrity: sha512-QldCVh/ztyKJJZLr4jXNUByx3gR+TDYZCRXEktiZoUR3PGy4qCmSbkxcIle8GEwGpb5JBZazlaJ/CxLidXdEbQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -3455,7 +3456,7 @@ snapshots:
       '@eslint/core': 0.15.2
       levn: 0.4.1
 
-  '@fontsource/manrope@5.2.6': {}
+  '@fontsource/manrope@5.3.0': {}
 
   '@humanfs/core@0.19.2':
     dependencies:
