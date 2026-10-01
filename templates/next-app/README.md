@@ -90,6 +90,6 @@ normaliza fallos HTTP/red/timeout. TanStack Query ya está montado en los provid
 reintentos limitados para consultas; las mutaciones no se reintentan automáticamente.
 
 Configura `NEXT_PUBLIC_API_URL` en `.env` (por defecto `http://localhost:4000`). Para servidor
-importa `createServerApi` de `@/shared/api/server`; usa `API_URL` y está aislado con `server-only`.
+importa `createServerApi` de `@/shared/server-api`; usa `API_URL` y está aislado con `server-only`.
 Dentro de Compose, esa URL apunta al host mediante `host.docker.internal`. Los QueryClient del
 servidor no se comparten entre peticiones.

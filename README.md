@@ -220,7 +220,7 @@ frontends usan 5173, 3000 y 8081.
 | Node y Nest        | Prisma 7, PostgreSQL, cliente generado automáticamente, pool, cierre de conexiones y comandos de migración. Schema sin modelos.      |
 | Go                 | pgx, PostgreSQL, pool y golang-migrate. Carpeta de migraciones vacía.                                                                |
 | React, Next y Expo | Cliente HTTP en `shared/api`, timeout, cancelación, errores normalizados y TanStack Query integrado en providers.                    |
-| Next               | Cliente de navegador por `NEXT_PUBLIC_API_URL`; cliente de servidor en `shared/api/server` por `API_URL`, aislado con `server-only`. |
+| Next               | Cliente de navegador por `NEXT_PUBLIC_API_URL`; cliente de servidor en `shared/server-api` por `API_URL`, aislado con `server-only`. |
 | Expo               | Foco y conectividad nativa conectados a TanStack Query.                                                                              |
 
 No se agregan CRUDs, modelos, seeds ni consultas de negocio. Las conexiones se verifican con
