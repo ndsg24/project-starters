@@ -53,6 +53,11 @@ jobs:
         run: pnpm --dir "$DESTINATION" test:api
       - if: matrix.template == 'expo-app'
         run: pnpm --dir "$DESTINATION" build:native
+      - name: Verify lint and formatting after native export
+        if: matrix.template == 'expo-app'
+        run: |
+          pnpm --dir "$DESTINATION" lint
+          pnpm --dir "$DESTINATION" format:check
       - if: matrix.template == 'react-vite' || matrix.template == 'next-app' || matrix.template == 'expo-app'
         run: pnpm install --frozen-lockfile
       - name: Browser preferences and responsive smoke

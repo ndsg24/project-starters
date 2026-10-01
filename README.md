@@ -117,17 +117,17 @@ destinos existentes.
 ### Descargar solamente un template, sin clonar el catálogo
 
 Ejecuta **solo la fila del proyecto que quieras crear**, desde la carpeta donde
-quieras guardarlo. Estos comandos descargan la versión publicada `v2.0.0` sin
+quieras guardarlo. Estos comandos descargan la versión publicada `v2.0.1` sin
 historial Git.
 
 | Proyecto            | Comando                                                                                |
 | ------------------- | -------------------------------------------------------------------------------------- |
-| Go API              | `npx giget@latest gh:ndsg24/project-starters/templates/go-api#v2.0.0 mi-api-go`        |
-| Node + Fastify      | `npx giget@latest gh:ndsg24/project-starters/templates/node-ts#v2.0.0 mi-api-node`     |
-| NestJS API          | `npx giget@latest gh:ndsg24/project-starters/templates/nest-api#v2.0.0 mi-api-nest`    |
-| React + Vite        | `npx giget@latest gh:ndsg24/project-starters/templates/react-vite#v2.0.0 mi-web-react` |
-| Next.js             | `npx giget@latest gh:ndsg24/project-starters/templates/next-app#v2.0.0 mi-web-next`    |
-| Expo / React Native | `npx giget@latest gh:ndsg24/project-starters/templates/expo-app#v2.0.0 mi-app-expo`    |
+| Go API              | `npx giget@latest gh:ndsg24/project-starters/templates/go-api#v2.0.1 mi-api-go`        |
+| Node + Fastify      | `npx giget@latest gh:ndsg24/project-starters/templates/node-ts#v2.0.1 mi-api-node`     |
+| NestJS API          | `npx giget@latest gh:ndsg24/project-starters/templates/nest-api#v2.0.1 mi-api-nest`    |
+| React + Vite        | `npx giget@latest gh:ndsg24/project-starters/templates/react-vite#v2.0.1 mi-web-react` |
+| Next.js             | `npx giget@latest gh:ndsg24/project-starters/templates/next-app#v2.0.1 mi-web-next`    |
+| Expo / React Native | `npx giget@latest gh:ndsg24/project-starters/templates/expo-app#v2.0.1 mi-app-expo`    |
 
 Después de la descarga, sustituye `mi-proyecto` por la carpeta que elegiste:
 
