@@ -117,17 +117,17 @@ destinos existentes.
 ### Descargar solamente un template, sin clonar el catálogo
 
 Ejecuta **solo la fila del proyecto que quieras crear**, desde la carpeta donde
-quieras guardarlo. Estos comandos descargan la versión publicada `v2.0.0` sin
+quieras guardarlo. Estos comandos descargan la versión publicada `v2.0.1` sin
 historial Git.
 
 | Proyecto            | Comando                                                                                |
 | ------------------- | -------------------------------------------------------------------------------------- |
-| Go API              | `npx giget@latest gh:ndsg24/project-starters/templates/go-api#v2.0.0 mi-api-go`        |
-| Node + Fastify      | `npx giget@latest gh:ndsg24/project-starters/templates/node-ts#v2.0.0 mi-api-node`     |
-| NestJS API          | `npx giget@latest gh:ndsg24/project-starters/templates/nest-api#v2.0.0 mi-api-nest`    |
-| React + Vite        | `npx giget@latest gh:ndsg24/project-starters/templates/react-vite#v2.0.0 mi-web-react` |
-| Next.js             | `npx giget@latest gh:ndsg24/project-starters/templates/next-app#v2.0.0 mi-web-next`    |
-| Expo / React Native | `npx giget@latest gh:ndsg24/project-starters/templates/expo-app#v2.0.0 mi-app-expo`    |
+| Go API              | `npx giget@latest gh:ndsg24/project-starters/templates/go-api#v2.0.1 mi-api-go`        |
+| Node + Fastify      | `npx giget@latest gh:ndsg24/project-starters/templates/node-ts#v2.0.1 mi-api-node`     |
+| NestJS API          | `npx giget@latest gh:ndsg24/project-starters/templates/nest-api#v2.0.1 mi-api-nest`    |
+| React + Vite        | `npx giget@latest gh:ndsg24/project-starters/templates/react-vite#v2.0.1 mi-web-react` |
+| Next.js             | `npx giget@latest gh:ndsg24/project-starters/templates/next-app#v2.0.1 mi-web-next`    |
+| Expo / React Native | `npx giget@latest gh:ndsg24/project-starters/templates/expo-app#v2.0.1 mi-app-expo`    |
 
 Después de la descarga, sustituye `mi-proyecto` por la carpeta que elegiste:
 
@@ -145,11 +145,45 @@ consulta el README del template para los cambios de identidad correspondientes.
 
 ### Validar el proyecto creado
 
-Dentro de cualquiera de los seis proyectos:
+Dentro de cualquiera de los seis proyectos, estos comandos se ejecutan desde
+la raíz del proyecto generado:
+
+| Comando             | Qué hace                                                                       |
+| ------------------- | ------------------------------------------------------------------------------ |
+| `pnpm lint`         | Revisa ESLint y falla ante errores o warnings. En Go también verifica `gofmt`. |
+| `pnpm lint:fix`     | Aplica las correcciones automáticas disponibles de ESLint.                     |
+| `pnpm format:check` | Comprueba el formato de Prettier sin modificar archivos.                       |
+| `pnpm format`       | Aplica Prettier a los archivos compatibles.                                    |
+| `pnpm typecheck`    | Comprueba tipos; en Go ejecuta `go vet`.                                       |
+| `pnpm check`        | Ejecuta lint, formato, tipos, tests y build.                                   |
+
+Para revisar y corregir lint/formato:
+
+```bash
+pnpm lint
+pnpm lint:fix
+pnpm format
+pnpm lint
+pnpm format:check
+```
+
+En Go, ESLint/Prettier cubren las herramientas JavaScript y los archivos
+compatibles; para corregir el formato del código Go ejecuta además:
+
+```bash
+gofmt -w cmd internal
+```
+
+Para la validación completa:
 
 ```bash
 pnpm check
 ```
+
+La CI ejecuta `pnpm check`, incluyendo lint y formato. El hook pre-commit
+aplica ESLint/Prettier mediante lint-staged a los archivos configurados que
+están preparados para el commit. Las correcciones automáticas pueden dejar
+errores que debas resolver manualmente antes de que `pnpm lint` pase.
 
 En las APIs puedes validar además el servidor compilado y sus contratos Bruno:
 
