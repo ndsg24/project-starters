@@ -22,7 +22,7 @@
     "docker:logs": "docker compose logs -f"
   },
   "dependencies": {
-    "next": "16.3.8",
+    "next": "16.4.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "i18next": "^25.0.0",
